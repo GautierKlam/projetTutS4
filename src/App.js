@@ -12,26 +12,38 @@ L.Icon.Default.mergeOptions({
     shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 });
 
-class App extends React.Component{
-  constructor() {
-    super()
-    this.state = {
-      lat: 49.133333,
-      lng: 6.166667,
-      zoom: 17
+class App extends React.Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      zoom: 17,
+      lat: 49,
+      long: 6
     }
   }
 
+  findCoordinates = () => {
+		navigator.geolocation.getCurrentPosition(
+			position => {
+        console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
+				this.setState({ lat: position.coords.latitude,
+                        long: position.coords.longitude
+                      })
+			}
+		);
+	};
+
   render() {
-    const position = [this.state.lat, this.state.lng];
+    this.findCoordinates();
+    var posi_actu = [this.state.lat, this.state.long];
     return (
-      <Map center={position} zoom={this.state.zoom} style={{height: '850px'}}>
+      <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <Marker position={position}>
+        <Marker position={posi_actu}>
           <Popup>
             <span>Vous êtes ici</span>
           </Popup>
