@@ -1,6 +1,5 @@
 var mysql = require('mysql');
  
-console.log('Get connection ...');
  
 var conn = mysql.createConnection({
    host:'devbdd.iutmetz.univ-lorraine.fr',
@@ -12,5 +11,4 @@ var conn = mysql.createConnection({
  
 conn.connect(function(err) {
   if (err) throw err;
-  console.log("Connected!");
 });
