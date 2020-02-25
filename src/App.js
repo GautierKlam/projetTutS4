@@ -28,6 +28,8 @@ class App extends React.Component{
     }
   }
 
+//---------------- FONCTION GEOLOCALISATION
+
   findCoordinates = () => {
 		navigator.geolocation.getCurrentPosition(
 			position => {
@@ -38,11 +40,12 @@ class App extends React.Component{
 			}
 		);
 	};
+
 //---------------- FONCTION BARRE DE RECHERCHE
 
     alerte = () => {
         this.setState ({
-        test: 1
+        test: 1w
         });
     }
     alerte2 = () => {
@@ -57,7 +60,7 @@ research = () => {
     });
    }
 
-//---------------- FIN BARRE DE RECHERCHE
+//---------------- FONCTION RENDER
   render() {
     this.findCoordinates();
     var posi_actu = [this.state.lat, this.state.long];
