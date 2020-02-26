@@ -45,7 +45,7 @@ class App extends React.Component{
 
     alerte = () => {
         this.setState ({
-        test: 1w
+        test: 1
         });
     }
     alerte2 = () => {
