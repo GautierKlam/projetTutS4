@@ -99,7 +99,7 @@ class App extends React.Component{
     return (
   <div>
     <header>
-        {this.state.description}
+        {this.state.all}
              {this.state.input==="te"?
                     <h1>test</h1>
                     :this.state.input.match(/^c.*$/)?
@@ -107,7 +107,6 @@ class App extends React.Component{
                         this.state.input>""?
                  <h1>{this.state.input} autre</h1>:null}
                 <input type="image" src={img} alt="loupe.png" onClick={this.alerte}/>
-            </div>
             {this.state.test> 0?
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
