@@ -90,11 +90,12 @@ class App extends React.Component{
                     <h1> cathedrale </h1>:
                         this.state.input>""?
              <h1>{this.state.input} fdp</h1>:null}
+             <div class="col-lg-4">
             <input type="image" src={img} alt="loupe.png" onClick={this.test}/>
-
+            </div>
             {this.state.test> 0?
              <p>
-                <input type="search"  placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
+                <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
                 <input type="image" src={img2} alt="croix.png" onClick={this.alerte2}/>
 
              </p>
