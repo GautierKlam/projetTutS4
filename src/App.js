@@ -3,14 +3,9 @@ import './App.css';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-<<<<<<< HEAD
 import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
-=======
-import img from "./loupe.png";
-import img2 from "./croix.png";
 import axios from 'axios';
->>>>>>> 61964ff0dc7aacacd515a2125ca1470720bbd1bf
 import {  iconPerson  } from './Icon';
 
 delete L.Icon.Default.prototype._getIconUrl;
