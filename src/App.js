@@ -142,11 +142,7 @@ class App extends React.Component{
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <Marker position={posi_actu} icon={ iconPerson }>
-          <Popup>
-            <span>Vous êtes ici</span>
-          </Popup>
-        </Marker>
+        <Marker position={posi_actu} icon={ iconPerson }></Marker>
         {
           monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} ></Marker>)
         }
