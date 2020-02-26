@@ -86,7 +86,7 @@ research = () => {
              :null
              }
     </header>
-      <Map center={position} zoom={this.state.zoom} style={{height: '850px'}}>
+      <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
