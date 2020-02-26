@@ -92,6 +92,15 @@ class App extends React.Component{
      window.navigator.vibrate(3000);
    }
 
+
+//---------------- FONCTIONS RECUPERER LES DONNEES
+
+
+   test = () => {
+      this.setState ({
+        all : this.state.all.split(' / ')
+      });
+   }
 //---------------- FONCTION RENDER
 
   render() {
@@ -102,7 +111,7 @@ class App extends React.Component{
     return (
   <div>
     <header>
-        {this.state.all}
+        <p> il y a {this.state.all.length} element</p>
              {this.state.input==="te"?
                     <h1>test</h1>
                     :this.state.input.match(/^c.*$/)?
