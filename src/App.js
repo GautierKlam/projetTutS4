@@ -197,7 +197,7 @@ class App extends React.Component{
       <body>
         <header>
           <div className="col-lg-4">
-             {this.state.input==="te"?
+            {this.state.input==="te"?
                     <h1>test</h1>
               :this.state.input==="test"?
                     <h1>tes</h1>
