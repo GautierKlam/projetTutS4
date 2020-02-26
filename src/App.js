@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import img from "./loupe.png";
 import img2 from "./croix.png";
-import {  iconPerson  } from './Icon';
+import {  iconPerson, iconMonument  } from './Icon';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -79,8 +79,21 @@ class App extends React.Component{
    vibre = () => {
      window.navigator.vibrate(3000);
    }
+
+   afficheMarkers =() =>{
+
+   }
 //---------------- FONCTION RENDER
   render() {
+
+    //--------------VARIABLES DE TEST ----------------
+    const monuments = [
+      { id: 1, lat: 49, longit: 6 },
+      { id: 2, lat: 48, longit: 7 },
+      { id: 3, lat: 49, longit: 6 },
+      { id: 4, lat: 48, longit: 7 },
+    ]
+    //-------------- FIN DES VARIABLES DE TEST ----------------
     this.findCoordinates();
     var posi_actu = [this.state.lat, this.state.lng];
     this.vibre();
@@ -114,6 +127,10 @@ class App extends React.Component{
             <span>Vous êtes ici</span>
           </Popup>
         </Marker>
+
+        {
+          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} ></Marker>)
+        }
 
       </Map>
     </body>
