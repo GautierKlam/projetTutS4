@@ -6,6 +6,7 @@ import L from 'leaflet';
 import axios from 'axios';
 import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
+import logo from "./assets/Logo.png";
 import {  iconPerson, iconMonument  } from './Icon';
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -176,8 +177,6 @@ class App extends React.Component{
   <body>
     <header>
              <div className="col-lg-4">
-                <input type="image" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
-                <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
              {this.state.input==="te"?
                     <h1>test</h1>
              :this.state.input==="test"?
@@ -188,8 +187,7 @@ class App extends React.Component{
              <h1>{this.state.input}autre</h1>:null}
              <div className="container col-md-9">
              <div className="row">
-
-                <img class="left" src={img2} width="100px"/>
+                <img class="left" src={logo} width="100px"/>
                 <div className="container col-md-5">
                <h1>Lieux touristiques à Metz</h1>
                </div>
@@ -202,10 +200,9 @@ class App extends React.Component{
             {this.state.test> 0?
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
-                <input type="image" src={img2} alt="croix.png" onClick={this.alerte2}/>
+                <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
                 {this.state.result.length>=""?
                     <h1>{this.state.result}</h1>:<p>pas de resultat</p>}
-                <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
              </p>
              :null
              }
@@ -217,13 +214,7 @@ class App extends React.Component{
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
         <Marker position={posi_actu} icon={ iconPerson }>
-          <Popup>
-            <span>Vous êtes ici</span>
-          </Popup>
         </Marker>
-        {
-          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} ></Marker>)
-        }
         {
           monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} /*onClick={this.displayInfo(x)}*/ ></Marker>)
         }
