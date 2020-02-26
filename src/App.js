@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import img from "./loupe.png";
 import img2 from "./croix.png";
+import axios from 'axios';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -24,19 +25,29 @@ class App extends React.Component{
       zoom: 17,
       test: 0,
       input:"",
+      all:"",
       nom:"",
-      description:""
+      description: ""
     }
   }
 
+    componentDidMount() {
+        axios.get('https://devweb.iutmetz.univ-lorraine.fr/~giuliani6u/ProjetS4/API/post/all.php', {headers: {"Access-Control-Allow-Origin": "*"}})
+        .then(res=> {
+            this.setState({
+                  all: res.data
+            });
+        })
+    }
 //---------------- FONCTION GEOLOCALISATION
 
   findCoordinates = () => {
 		navigator.geolocation.getCurrentPosition(
 			position => {
         console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
+        console.log(`Description : ${ this.state.description}`);
 				this.setState({ lat: position.coords.latitude,
-                        long: position.coords.longitude
+                        lng: position.coords.longitude
                       })
 			}
 		);
@@ -46,7 +57,7 @@ class App extends React.Component{
 
     alerte = () => {
         this.setState ({
-        test: 1w
+        test: 1
         });
     }
     alerte2 = () => {
@@ -64,18 +75,20 @@ research = () => {
 //---------------- FONCTION RENDER
 
   render() {
+    console.log(this.state.description);
     this.findCoordinates();
-    var posi_actu = [this.state.lat, this.state.long];
+    var posi_actu = [this.state.lat, this.state.lng];
     return (
-  <body>
+  <div>
     <header>
-             {this.state.input==="apex"?
-                    <h1>t'es pas platine mdrrr</h1>
+        {this.state.description}
+             {this.state.input==="te"?
+                    <h1>test</h1>
                     :this.state.input.match(/^c.*$/)?
                     <h1> cathedrale </h1>:
                         this.state.input>""?
-             <h1>{this.state.input} fdp</h1>:null}
-            <input type="image" src={img} alt="loupe.png" onClick={this.test}/>
+             <h1>{this.state.input} autre</h1>:null}
+            <input type="image" src={img} alt="loupe.png" onClick={this.alerte}/>
 
             {this.state.test> 0?
              <p>
@@ -86,7 +99,7 @@ research = () => {
              :null
              }
     </header>
-      <Map center={position} zoom={this.state.zoom} style={{height: '850px'}}>
+      <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -97,7 +110,7 @@ research = () => {
           </Popup>
         </Marker>
       </Map>
-    </body>
+    </div>
     );
   }
 }
