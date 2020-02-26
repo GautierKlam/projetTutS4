@@ -3,8 +3,14 @@ import './App.css';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+<<<<<<< HEAD
 import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
+=======
+import img from "./loupe.png";
+import img2 from "./croix.png";
+import axios from 'axios';
+>>>>>>> 61964ff0dc7aacacd515a2125ca1470720bbd1bf
 import {  iconPerson  } from './Icon';
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -26,11 +32,20 @@ class App extends React.Component{
       test: 0,
       vibre: 0,
       input:"",
+      all:"",
       nom:"",
-      description:""
+      description: ""
     }
   }
 
+    componentDidMount() {
+        axios.get('https://devweb.iutmetz.univ-lorraine.fr/~giuliani6u/ProjetS4/API/post/all.php', {headers: {"Access-Control-Allow-Origin": "*"}})
+        .then(res=> {
+            this.setState({
+                  all: res.data
+            });
+        })
+    }
 //---------------- FONCTION GEOLOCALISATION
 
   findCoordinates = () => {
@@ -45,6 +60,7 @@ class App extends React.Component{
     const refreshMap = navigator.geolocation.watchPosition(
 			position => {
         console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
+        console.log(`Description : ${ this.state.description}`);
 				this.setState({ lat: position.coords.latitude,
                         lng: position.coords.longitude
                       })
@@ -59,7 +75,7 @@ class App extends React.Component{
 
     alerte = () => {
         this.setState ({
-          test: 1
+            test: 1
         });
     }
 
@@ -81,20 +97,22 @@ class App extends React.Component{
    }
 //---------------- FONCTION RENDER
   render() {
+    console.log(this.state.description);
     this.findCoordinates();
     var posi_actu = [this.state.lat, this.state.lng];
     this.vibre();
     return (
-  <body>
+  <div>
     <header>
+        {this.state.description}
              {this.state.input==="te"?
                     <h1>test</h1>
                     :this.state.input.match(/^c.*$/)?
                     <h1>cathedrale </h1>:
                         this.state.input>""?
-             <h1>{this.state.input}autre</h1>:null}
-             <div className="col-lg-4">
-            <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
+               <h1>{this.state.input}autre</h1>:null}
+               <div className="col-lg-4">
+              <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
             </div>
             {this.state.test> 0?
              <p>
@@ -116,7 +134,7 @@ class App extends React.Component{
         </Marker>
 
       </Map>
-    </body>
+    </div>
     );
   }
 }
