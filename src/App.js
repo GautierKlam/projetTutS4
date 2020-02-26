@@ -3,8 +3,8 @@ import './App.css';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import img from "./loupe.png"
-import img2 from "./croix.png"
+import img from "./loupe.png";
+import img2 from "./croix.png";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -15,6 +15,7 @@ L.Icon.Default.mergeOptions({
 });
 
 class App extends React.Component{
+
   constructor() {
     super()
     this.state = {
@@ -61,6 +62,7 @@ research = () => {
    }
 
 //---------------- FONCTION RENDER
+
   render() {
     this.findCoordinates();
     var posi_actu = [this.state.lat, this.state.long];
@@ -73,7 +75,7 @@ research = () => {
                     <h1> cathedrale </h1>:
                         this.state.input>""?
              <h1>{this.state.input} fdp</h1>:null}
-            <input type="image" src={img} alt="loupe.png" onClick={this.alerte}/>
+            <input type="image" src={img} alt="loupe.png" onClick={this.test}/>
 
             {this.state.test> 0?
              <p>
