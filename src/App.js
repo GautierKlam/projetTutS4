@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import img from "./loupe.png";
 import img2 from "./croix.png";
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -90,7 +91,7 @@ class App extends React.Component{
                     <h1> cathedrale </h1>:
                         this.state.input>""?
              <h1>{this.state.input} fdp</h1>:null}
-             <div class="col-lg-4 center">//bootstrap
+             <div className="col-lg-4">
             <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
             </div>
             {this.state.test> 0?
