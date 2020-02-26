@@ -7,7 +7,11 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",
+<<<<<<< HEAD
     "axios": "^0.19.2",
+=======
+    "bootstrap": "^4.4.1",
+>>>>>>> f0a5ddd8597bd5f345a21a97f76700020552e9e8
     "leaflet": "^1.6.0",
     "mysql": "^2.18.1",
     "react": "^16.12.0",

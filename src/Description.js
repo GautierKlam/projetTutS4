@@ -6,10 +6,12 @@ class Description extends React.Component{
       super(props);
 
       this.state = {
-          img1: null,
-          img2: null,
-          img3: null,
-          img4: null,
+          id: "",
+          nom: "",
+          img1: "",
+          img2: "",
+          img3: "",
+          img4: "",
           text: "",
           adresse: ""
       }
@@ -18,6 +20,7 @@ class Description extends React.Component{
   render() {
     return(
       <div class="App-description">
+        <p>{this.state.nom}</p>
         <img src={this.state.img1}/>
         <img src={this.state.img2}/>
         <img src={this.state.img3}/>

@@ -6,6 +6,7 @@ import L from 'leaflet';
 import img from "./loupe.png";
 import img2 from "./croix.png";
 import axios from 'axios';
+import {  iconPerson  } from './Icon';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -20,10 +21,11 @@ class App extends React.Component{
   constructor() {
     super()
     this.state = {
-      lat: 49.133333,
-      lng: 6.166667,
+      lat: 0,
+      lng: 0,
       zoom: 17,
       test: 0,
+      vibre: 0,
       input:"",
       all:"",
       nom:"",
@@ -42,7 +44,15 @@ class App extends React.Component{
 //---------------- FONCTION GEOLOCALISATION
 
   findCoordinates = () => {
-		navigator.geolocation.getCurrentPosition(
+		navigator.geolocation.getCurrentPosition (
+			position => {
+        //console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
+				this.setState({ lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                      })
+			}
+		);
+    const refreshMap = navigator.geolocation.watchPosition(
 			position => {
         console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
         console.log(`Description : ${ this.state.description}`);
@@ -51,33 +61,41 @@ class App extends React.Component{
                       })
 			}
 		);
-	};
+    /*setTimeout(() => {
+      navigator.geolocation.clearWatch(refreshMap);
+    }, 15000);*/
+	}
 
 //---------------- FONCTION BARRE DE RECHERCHE
 
     alerte = () => {
         this.setState ({
-        test: 1
+            test: 1
         });
     }
+
     alerte2 = () => {
         this.setState ({
-        test: 0,
-        input:""
+          test: 0,
+          input:""
         });
     }
-research = () => {
-    this.setState ({
-    input : document.getElementById('search').value
-    });
+
+    research = () => {
+      this.setState ({
+        input : document.getElementById('search').value
+      });
    }
 
+   vibre = () => {
+     window.navigator.vibrate(3000);
+   }
 //---------------- FONCTION RENDER
-
   render() {
     console.log(this.state.description);
     this.findCoordinates();
     var posi_actu = [this.state.lat, this.state.lng];
+    this.vibre();
     return (
   <div>
     <header>
@@ -87,14 +105,13 @@ research = () => {
                     :this.state.input.match(/^c.*$/)?
                     <h1> cathedrale </h1>:
                         this.state.input>""?
-             <h1>{this.state.input} autre</h1>:null}
-            <input type="image" src={img} alt="loupe.png" onClick={this.alerte}/>
-
+                 <h1>{this.state.input} autre</h1>:null}
+                <input type="image" src={img} alt="loupe.png" onClick={this.alerte}/>
+            </div>
             {this.state.test> 0?
              <p>
-                <input type="search"  placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
+                <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
                 <input type="image" src={img2} alt="croix.png" onClick={this.alerte2}/>
-
              </p>
              :null
              }
@@ -104,11 +121,12 @@ research = () => {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <Marker position={posi_actu}>
+        <Marker position={posi_actu} icon={ iconPerson }>
           <Popup>
             <span>Vous êtes ici</span>
           </Popup>
         </Marker>
+
       </Map>
     </div>
     );
