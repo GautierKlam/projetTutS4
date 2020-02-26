@@ -104,7 +104,7 @@ class App extends React.Component{
     return (
   <div>
     <header>
-        {this.state.description}
+        {this.state.all}
              {this.state.input==="te"?
                     <h1>test</h1>
                     :this.state.input.match(/^c.*$/)?
