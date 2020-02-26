@@ -160,15 +160,17 @@ class App extends React.Component{
     research = () => {
     let j=0;
     let array=[];
-    let str=document.getElementById('search').value;
-    str=str.toLowerCase();
+    let s=document.getElementById('search').value;
+    let a="z";
+    if(s.match(/c.*/))
+     console.log("cool");
+     else
+     console.log("ntm");
       for(let i=0;i<this.state.nom.length;i++){
-          let rech=""+this.state.nom[i];
-          rech=rech.toLowerCase();
-          if(rech.includes(str)){
-              array[j]=this.state.nom[i];
-              j=j+1;
-          }
+      if(this.state.nom[i]===document.getElementById('search').value){
+      array[j]=this.state.nom[i];
+      j=j+1;
+      }
     }
     this.setState ({
         result: array
@@ -178,6 +180,27 @@ class App extends React.Component{
    vibre = () => {
      window.navigator.vibrate(3000);
    }
+
+   userInProximity(){
+  var a=this.state.lat
+  var b=this.state.lng
+  var tab=[]
+  var lieu=null
+  var prox=false
+
+  for(let i=0;i<this.state.id.length;i++)
+    tab[i] = {nom: this.state.nom[i], desc: this.state.description[i], lat: this.state.listLat[i], lng:this.state.lon[i]}
+
+  var tab2 = tab.map(x => a>x.lat-0.001 && a<x.lat+0.001 && b<x.lng+0.001 && b>x.lng-0.001)     //20metre(1" à priori)
+
+  if(tab2.includes(true)){
+    lieu = tab[tab2.indexOf(true)]
+    prox = true
+  }
+  return ({lieu:lieu, prox :prox})
+
+}
+
   render() {
 
     var monum = []
@@ -193,8 +216,8 @@ class App extends React.Component{
     return (
       <body>
         <header>
-          <div className="col-lg-4">
-            {this.state.input==="te"?
+
+             {this.state.input==="te"?
                     <h1>test</h1>
               :this.state.input==="test"?
                     <h1>tes</h1>
@@ -202,7 +225,6 @@ class App extends React.Component{
                     <h1>cathedrale</h1>:
                         this.state.input>""?
                           <h1>{this.state.input}autre</h1>:null}
-          </div>
              <div className="container col-md-9">
               <div className="row">
               <img class="left" src={logo} width="7%"/>
@@ -219,15 +241,15 @@ class App extends React.Component{
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
                 <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
-                {this.state.result.length==""?
-                    null:this.state.result.length>=""?
-                         <p>{this.state.result.map(result=> <input type="button" align="center" src={result} value={result} onClick={this.alerte2}/>
-                         )}</p>:<p>pas de resultat</p>}
+                {this.state.result.length>=""?
+                    <h1>{this.state.result}</h1>:<p>pas de resultat</p>}
              </p>
              </div>
              :null
              }
+
     </header>
+
       <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -236,11 +258,22 @@ class App extends React.Component{
         <Marker position={posi_actu} icon={ iconPerson }>
         </Marker>
         {
-           monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={this.DisplayDesc(x.id)} ></Marker>)
+           monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} /* onClick={this.DisplayDesc(x.id)} */ ></Marker>)
           }
         }
       </Map>
+      {this.userInProximity().prox?(
 
+      //window.navigator.vibrate(3000),      VIBRATION
+      <div className="App-Proximity">
+      <p> Je suis à proximité de {this.userInProximity().lieu.nom}</p>
+      <p> {this.userInProximity().lieu.desc}</p>
+      </div>
+      ):
+      <div className="App-NoProximity">
+      <p> Je ne suis pas à proximité d'un monument </p>
+      </div>
+      }
     </body>
     );
   }
