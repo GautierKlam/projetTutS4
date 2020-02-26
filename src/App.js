@@ -171,12 +171,33 @@ class App extends React.Component{
     this.findCoordinates();
     var posi_actu = [this.state.lat, this.state.lng];
     this.vibre();
+    /*<p> il y a {this.state.all.length} element</p>*/
     return (
   <body>
     <header>
              <div className="col-lg-4">
                 <input type="image" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
                 <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
+             {this.state.input==="te"?
+                    <h1>test</h1>
+             :this.state.input==="test"?
+                    <h1>tes</h1>
+                    :this.state.input.match(/^c.*$/)?
+                    <h1>cathedrale</h1>:
+                        this.state.input>""?
+             <h1>{this.state.input}autre</h1>:null}
+             <div className="container col-md-9">
+             <div className="row">
+
+                <img class="left" src={img2} width="100px"/>
+                <div className="container col-md-5">
+               <h1>Lieux touristiques à Metz</h1>
+               </div>
+
+                 <div className="col-md-offset-10">
+            <input type="image" class="test" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
+            </div>
+            </div>
             </div>
             {this.state.test> 0?
              <p>
@@ -184,9 +205,11 @@ class App extends React.Component{
                 <input type="image" src={img2} alt="croix.png" onClick={this.alerte2}/>
                 {this.state.result.length>=""?
                     <h1>{this.state.result}</h1>:<p>pas de resultat</p>}
+                <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
              </p>
              :null
              }
+             </div>
     </header>
       <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
         <TileLayer
@@ -201,8 +224,10 @@ class App extends React.Component{
         {
           monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} ></Marker>)
         }
+        {
+          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} /*onClick={this.displayInfo(x)}*/ ></Marker>)
+        }
       </Map>
-
     </body>
     );
   }
