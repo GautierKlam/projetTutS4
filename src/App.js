@@ -8,6 +8,7 @@ import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
 import logo from "./assets/Logo.png";
 import {  iconPerson, iconMonument  } from './Icon';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -194,7 +195,7 @@ class App extends React.Component{
     return (
       <body>
         <header>
-          <div className="col-lg-4">
+
              {this.state.input==="te"?
                     <h1>test</h1>
               :this.state.input==="test"?
@@ -205,7 +206,7 @@ class App extends React.Component{
                           <h1>{this.state.input}autre</h1>:null}
              <div className="container col-md-9">
               <div className="row">
-              <img class="left" src={logo} width="100px"/>
+              <img class="left" src={logo} width="7%"/>
                   <div className="container col-md-5">
                  <h1>Lieux touristiques à Metz</h1>
                  </div>
@@ -215,16 +216,19 @@ class App extends React.Component{
               </div>
             </div>
             {this.state.test> 0?
+              <div className="container col-md-5">
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
                 <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
                 {this.state.result.length>=""?
                     <h1>{this.state.result}</h1>:<p>pas de resultat</p>}
              </p>
+             </div>
              :null
              }
-             </div>
+
     </header>
+
       <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -237,6 +241,7 @@ class App extends React.Component{
           }
         }
       </Map>
+
     </body>
     );
   }
