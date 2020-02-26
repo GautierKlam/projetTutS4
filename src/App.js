@@ -19,8 +19,8 @@ class App extends React.Component{
   constructor() {
     super()
     this.state = {
-      lat: 49.133333,
-      lng: 6.166667,
+      lat: 0,
+      lng: 0,
       zoom: 17,
       test: 0,
       input:"",
@@ -32,40 +32,55 @@ class App extends React.Component{
 //---------------- FONCTION GEOLOCALISATION
 
   findCoordinates = () => {
-		navigator.geolocation.getCurrentPosition(
+		navigator.geolocation.getCurrentPosition (
 			position => {
-        console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
+        //console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
 				this.setState({ lat: position.coords.latitude,
-                        long: position.coords.longitude
+                        lng: position.coords.longitude
                       })
 			}
 		);
-	};
+    const refreshMap = navigator.geolocation.watchPosition(
+			position => {
+        //console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
+				this.setState({ lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                      })
+			}
+		);
+    /*setTimeout(() => {
+      navigator.geolocation.clearWatch(refreshMap);
+    }, 15000);*/
+	}
+
+//---------------- FONCTION ACTUALISER LA GEOLOCALISATION
 
 //---------------- FONCTION BARRE DE RECHERCHE
 
     alerte = () => {
         this.setState ({
-        test: 1
+          test: 1
         });
     }
+
     alerte2 = () => {
         this.setState ({
-        test: 0,
-        input:""
+          test: 0,
+          input:""
         });
     }
-research = () => {
-    this.setState ({
-    input : document.getElementById('search').value
-    });
+
+    research = () => {
+      this.setState ({
+        input : document.getElementById('search').value
+      });
    }
 
 //---------------- FONCTION RENDER
 
   render() {
     this.findCoordinates();
-    var posi_actu = [this.state.lat, this.state.long];
+    var posi_actu = [this.state.lat, this.state.lng];
     return (
   <body>
     <header>
@@ -86,7 +101,7 @@ research = () => {
              :null
              }
     </header>
-      <Map center={position} zoom={this.state.zoom} style={{height: '850px'}}>
+      <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
