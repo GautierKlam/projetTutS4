@@ -8,6 +8,7 @@ import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
 import logo from "./assets/Logo.png";
 import {  iconPerson, iconMonument  } from './Icon';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -205,6 +206,7 @@ class App extends React.Component{
                     <h1>cathedrale</h1>:
                         this.state.input>""?
                           <h1>{this.state.input}autre</h1>:null}
+          </div>
              <div className="container col-md-9">
               <div className="row">
               <img class="left" src={logo} width="100px"/>
@@ -217,15 +219,16 @@ class App extends React.Component{
               </div>
             </div>
             {this.state.test> 0?
-             <p>
-                <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
-                <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
-                {this.state.result.length>=""?
-                    <h1>{this.state.result}</h1>:<p>pas de resultat</p>}
-             </p>
-             :null
+                <div className="container col-md-2">
+               <p>
+                  <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
+                  <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
+                  {this.state.result.length>=""?
+                      <h1>{this.state.result}</h1>:<p>pas de resultat</p>}
+               </p>
+               </div>
+               :null
              }
-             </div>
     </header>
       <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
         <TileLayer
@@ -238,6 +241,7 @@ class App extends React.Component{
           monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} onClick={this.DisplayDesc(x)} ></Marker>)
         }
       </Map>
+
     </body>
     );
   }
