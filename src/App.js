@@ -41,6 +41,7 @@ class App extends React.Component{
             });
         })
     }
+    
 //---------------- FONCTION GEOLOCALISATION
 
   findCoordinates = () => {
@@ -90,7 +91,9 @@ class App extends React.Component{
    vibre = () => {
      window.navigator.vibrate(3000);
    }
+
 //---------------- FONCTION RENDER
+
   render() {
     console.log(this.state.description);
     this.findCoordinates();
