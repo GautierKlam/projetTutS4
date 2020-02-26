@@ -126,10 +126,10 @@ class App extends React.Component{
     this.findCoordinates();
     var posi_actu = [this.state.lat, this.state.lng];
     this.vibre();
+    /*<p> il y a {this.state.all.length} element</p>*/
     return (
   <body>
     <header>
-        <p> il y a {this.state.all.length} element</p>
              {this.state.input==="te"?
                     <h1>test</h1>
              :this.state.input==="test"?
@@ -168,12 +168,9 @@ class App extends React.Component{
         />
         <Marker position={posi_actu} icon={ iconPerson }></Marker>
         {
-          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} onClick={this.displayInfo(x)} ></Marker>)
+          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} /*onClick={this.displayInfo(x)}*/ ></Marker>)
         }
       </Map>
-        {
-          monuments.map(x => <p> {x.desc} <img src={x.img} alt={x.nom}/> </p> )
-        }
     </body>
     );
   }
