@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import img from "./loupe.png";
 import img2 from "./croix.png";
+import {  iconPerson  } from './Icon';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -23,6 +24,7 @@ class App extends React.Component{
       lng: 0,
       zoom: 17,
       test: 0,
+      vibre: 0,
       input:"",
       nom:"",
       description:""
@@ -42,7 +44,7 @@ class App extends React.Component{
 		);
     const refreshMap = navigator.geolocation.watchPosition(
 			position => {
-        //console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
+        console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
 				this.setState({ lat: position.coords.latitude,
                         lng: position.coords.longitude
                       })
@@ -52,8 +54,6 @@ class App extends React.Component{
       navigator.geolocation.clearWatch(refreshMap);
     }, 15000);*/
 	}
-
-//---------------- FONCTION ACTUALISER LA GEOLOCALISATION
 
 //---------------- FONCTION BARRE DE RECHERCHE
 
@@ -76,11 +76,14 @@ class App extends React.Component{
       });
    }
 
+   vibre = () => {
+     window.navigator.vibrate(3000);
+   }
 //---------------- FONCTION RENDER
-
   render() {
     this.findCoordinates();
     var posi_actu = [this.state.lat, this.state.lng];
+    this.vibre();
     return (
   <body>
     <header>
@@ -91,12 +94,10 @@ class App extends React.Component{
                         this.state.input>""?
              <h1>{this.state.input} fdp</h1>:null}
             <input type="image" src={img} alt="loupe.png" onClick={this.test}/>
-
             {this.state.test> 0?
              <p>
                 <input type="search"  placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
                 <input type="image" src={img2} alt="croix.png" onClick={this.alerte2}/>
-
              </p>
              :null
              }
@@ -106,11 +107,12 @@ class App extends React.Component{
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <Marker position={posi_actu}>
+        <Marker position={posi_actu} icon={ iconPerson }>
           <Popup>
             <span>Vous êtes ici</span>
           </Popup>
         </Marker>
+
       </Map>
     </body>
     );
