@@ -3,6 +3,7 @@ import './App.css';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import axios from 'axios';
 import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
 import {  iconPerson, iconMonument  } from './Icon';
@@ -31,6 +32,15 @@ class App extends React.Component{
       description:""
     }
   }
+
+      componentDidMount() {
+        axios.get('https://devweb.iutmetz.univ-lorraine.fr/~giuliani6u/ProjetS4/API/post/all.php', {headers: {"Access-Control-Allow-Origin": "*"}})
+        .then(res=> {
+            this.setState({
+                  all: res.data
+            });
+        })
+    }
 
 //---------------- FONCTION GEOLOCALISATION
 
