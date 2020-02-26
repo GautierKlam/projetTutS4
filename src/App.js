@@ -80,9 +80,6 @@ class App extends React.Component{
      window.navigator.vibrate(3000);
    }
 
-   afficheMarkers =() =>{
-
-   }
 //---------------- FONCTION RENDER
   render() {
 
@@ -127,11 +124,9 @@ class App extends React.Component{
             <span>Vous êtes ici</span>
           </Popup>
         </Marker>
-
         {
           monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} ></Marker>)
         }
-
       </Map>
     </body>
     );
