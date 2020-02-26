@@ -66,6 +66,30 @@ class App extends React.Component{
     }, 15000);*/
 	}
 
+  //---------------- FONCTION AFFICHER Description
+
+  description(props) {
+    return(
+      <div class="App-description">
+        <p>{props.nom}</p>
+
+        <img src={props.img1}/>
+        <img src={props.img2}/>
+        <img src={props.img3}/>
+        <img src={props.img4}/>
+
+        <p>{props.text}</p>
+
+        <p>{props.adresse}</p>
+      </div>
+    )
+   }
+
+     DisplayDesc(x) {
+       return( <description id = {x.id} nom = {x.nom} img1 = {x.img1} img2 = {x.img2} img3 = {x.img3} img4 = {x.img4} desc = {x.desc} adresse = {x.adresse}/>);
+     }
+
+
 //---------------- FONCTION BARRE DE RECHERCHE
 
     alerte = () => {
@@ -91,17 +115,6 @@ class App extends React.Component{
      window.navigator.vibrate(3000);
    }
 
-/*
-//---------------- FONCTION AFFICHER Description
-  displayInfo = (x){
-    monuments.map(y => if(x.equals(y))
-    render(){
-
-    }
-     <p> {x.desc} <img src={x.img} alt={x.nom}/> </p> )
-  }
-  */
-
 //---------------- FONCTIONS RECUPERER LES DONNEES
 
 
@@ -115,7 +128,7 @@ class App extends React.Component{
 
     //--------------VARIABLES DE TEST ----------------
     const monuments = [
-      { id: 1, nom: "monum1", lat: 49, longit: 6, desc: "desc1", img:"https://goodguideinrio.com/wp-content/uploads/2018/03/good-guide-in-rio-city-tour-rio-3-450x450.jpg" },
+      { id: 1, nom: "monum1", lat: 49, longit: 6, desc: "desc1", img1:"https://goodguideinrio.com/wp-content/uploads/2018/03/good-guide-in-rio-city-tour-rio-3-450x450.jpg", img2: "http://www.jcmsolar.fr/wp-content/uploads/2018/06/Capture-d%E2%80%99%C3%A9cran-2018-06-05-%C3%A0-21.15.57-1024x798.png", img3: "https://maisons-prestige.com/wp-content/uploads/2017/03/A.jpg", img4: "https://www.solutio-travaux.com/wp-content/uploads/2018/12/extension-de-maison-tarn-2-w1400-1.jpg", adresse: "OK LE TEST DE L'ADRESSE" },  
       { id: 2, nom: "monum2", lat: 48, longit: 6, desc: "desc2", img:"https://www.merveilles-du-monde.com/Statue-de-la-Liberte/images/Vignettes/Photos/Liberty-island-V.jpg" },
       { id: 3, nom: "monum3", lat: 49, longit: 7, desc: "desc3", img:"https://stileex.xyz/wp-content/uploads/2019/06/7-Merveilles-du-monde-11Machu-450x300.jpg.webp" },
       { id: 4, nom: "monum4", lat: 48, longit: 7, desc: "desc4", img:"https://image.noelshack.com/fichiers/2019/49/4/1575562067-3apw27-1.png" },
@@ -154,12 +167,9 @@ class App extends React.Component{
         />
         <Marker position={posi_actu} icon={ iconPerson }></Marker>
         {
-          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} onClick={this.displayInfo(x)} ></Marker>)
+          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} onClick={this.DisplayDesc(x)} ></Marker>)
         }
       </Map>
-        {
-          monuments.map(x => <p> {x.desc} <img src={x.img} alt={x.nom}/> </p> )
-        }
     </body>
     );
   }
