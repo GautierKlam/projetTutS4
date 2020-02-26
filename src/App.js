@@ -109,7 +109,7 @@ class App extends React.Component{
         <p> il y a {this.state.all.length} element</p>
              {this.state.input==="te"?
                     <h1>test</h1>
-             {this.state.input==="test"?
+             :this.state.input==="test"?
                     <h1>tes</h1>
                     :this.state.input.match(/^c.*$/)?
                     <h1>cathedrale</h1>:
