@@ -25,6 +25,7 @@ class App extends React.Component{
       zoom: 17,
       test: 0,
       vibre: 0,
+      all:"",
       input:"",
       nom:"",
       description:""
