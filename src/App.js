@@ -194,28 +194,27 @@ class App extends React.Component{
     this.vibre();
     /*<p> il y a {this.state.all.length} element</p>*/
     return (
-  <body>
-    <header>
-             <div className="col-lg-4">
+      <body>
+        <header>
+          <div className="col-lg-4">
              {this.state.input==="te"?
                     <h1>test</h1>
-             :this.state.input==="test"?
+              :this.state.input==="test"?
                     <h1>tes</h1>
-                    :this.state.input.match(/^c.*$/)?
+              :this.state.input.match(/^c.*$/)?
                     <h1>cathedrale</h1>:
                         this.state.input>""?
-             <h1>{this.state.input}autre</h1>:null}
+                          <h1>{this.state.input}autre</h1>:null}
              <div className="container col-md-9">
-             <div className="row">
-                <img class="left" src={logo} width="100px"/>
-                <div className="container col-md-5">
-               <h1>Lieux touristiques à Metz</h1>
-               </div>
-
-                 <div className="col-md-offset-10">
-            <input type="image" class="test" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
-            </div>
-            </div>
+              <div className="row">
+              <img class="left" src={logo} width="100px"/>
+                  <div className="container col-md-5">
+                 <h1>Lieux touristiques à Metz</h1>
+                 </div>
+                   <div className="col-md-offset-10">
+                    <input type="image" class="test" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
+                </div>
+              </div>
             </div>
             {this.state.test> 0?
              <p>
