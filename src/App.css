@@ -1,6 +1,25 @@
 .App {
   text-align: center;
 }
+.marge{
+  margin-right: 100px;
+}
+.test {
+    width: 100px;
+}
+.test1 {
+    width: 20px;
+}
+input[type='search'] {
+    width: 200px;
+}
+
+.right{
+  float:right;
+}
+.left{
+  float:left;
+}
 
 .App-logo {
   height: 40vmin;
