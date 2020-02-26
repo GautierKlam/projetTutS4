@@ -3,6 +3,7 @@ import './App.css';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import axios from 'axios';
 import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
 import {  iconPerson, iconMonument  } from './Icon';
@@ -25,11 +26,21 @@ class App extends React.Component{
       zoom: 17,
       test: 0,
       vibre: 0,
+      all:"",
       input:"",
       nom:"",
       description:""
     }
   }
+
+      componentDidMount() {
+        axios.get('https://devweb.iutmetz.univ-lorraine.fr/~giuliani6u/ProjetS4/API/post/all.php', {headers: {"Access-Control-Allow-Origin": "*"}})
+        .then(res=> {
+            this.setState({
+                  all: res.data
+            });
+        })
+    }
 
 //---------------- FONCTION GEOLOCALISATION
 
@@ -80,6 +91,15 @@ class App extends React.Component{
      window.navigator.vibrate(3000);
    }
 
+
+//---------------- FONCTIONS RECUPERER LES DONNEES
+
+
+   test = () => {
+      this.setState ({
+        all : this.state.all.split(' / ')
+      });
+   }
 //---------------- FONCTION RENDER
   render() {
 
@@ -97,14 +117,17 @@ class App extends React.Component{
     return (
   <body>
     <header>
-             {this.state.input==="test"?
+        <p> il y a {this.state.all.length} element</p>
+             {this.state.input==="te"?
+                    <h1>test</h1>
+             :this.state.input==="test"?
                     <h1>tes</h1>
                     :this.state.input.match(/^c.*$/)?
                     <h1>cathedrale</h1>:
                         this.state.input>""?
              <h1>{this.state.input}autre</h1>:null}
              <div className="col-lg-4">
-            <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
+            <input type="image" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
             </div>
             {this.state.test> 0?
              <p>
