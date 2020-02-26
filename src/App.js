@@ -91,6 +91,16 @@ class App extends React.Component{
      window.navigator.vibrate(3000);
    }
 
+/*
+//---------------- FONCTION AFFICHER Description
+  displayInfo = (x){
+    monuments.map(y => if(x.equals(y))
+    render(){
+
+    }
+     <p> {x.desc} <img src={x.img} alt={x.nom}/> </p> )
+  }
+  */
 
 //---------------- FONCTIONS RECUPERER LES DONNEES
 
@@ -106,9 +116,9 @@ class App extends React.Component{
     //--------------VARIABLES DE TEST ----------------
     const monuments = [
       { id: 1, nom: "monum1", lat: 49, longit: 6, desc: "desc1", img:"https://goodguideinrio.com/wp-content/uploads/2018/03/good-guide-in-rio-city-tour-rio-3-450x450.jpg" },
-      { id: 2, nom: "monum2", lat: 48, longit: 7, desc: "desc1", img:"https://www.merveilles-du-monde.com/Statue-de-la-Liberte/images/Vignettes/Photos/Liberty-island-V.jpg" },
-      { id: 3, nom: "monum3", lat: 49, longit: 6, desc: "desc1", img:"https://stileex.xyz/wp-content/uploads/2019/06/7-Merveilles-du-monde-11Machu-450x300.jpg.webp" },
-      { id: 4, nom: "monum4", lat: 48, longit: 7, desc: "desc1", img:"https://image.noelshack.com/fichiers/2019/49/4/1575562067-3apw27-1.png" },
+      { id: 2, nom: "monum2", lat: 48, longit: 6, desc: "desc2", img:"https://www.merveilles-du-monde.com/Statue-de-la-Liberte/images/Vignettes/Photos/Liberty-island-V.jpg" },
+      { id: 3, nom: "monum3", lat: 49, longit: 7, desc: "desc3", img:"https://stileex.xyz/wp-content/uploads/2019/06/7-Merveilles-du-monde-11Machu-450x300.jpg.webp" },
+      { id: 4, nom: "monum4", lat: 48, longit: 7, desc: "desc4", img:"https://image.noelshack.com/fichiers/2019/49/4/1575562067-3apw27-1.png" },
     ]
     //-------------- FIN DES VARIABLES DE TEST ----------------
     this.findCoordinates();
@@ -148,7 +158,7 @@ class App extends React.Component{
           </Popup>
         </Marker>
         {
-          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} ></Marker>)
+          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} onClick={this.displayInfo(x)} ></Marker>)
         }
       </Map>
         {
