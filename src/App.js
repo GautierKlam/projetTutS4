@@ -208,7 +208,7 @@ class App extends React.Component{
                           <h1>{this.state.input}autre</h1>:null}
              <div className="container col-md-9">
               <div className="row">
-              <img class="left" src={logo} width="100px"/>
+              <img class="left" src={logo} width="7%"/>
                   <div className="container col-md-5">
                  <h1>Lieux touristiques à Metz</h1>
                  </div>
@@ -218,7 +218,7 @@ class App extends React.Component{
               </div>
             </div>
             {this.state.test> 0?
-              <div className="container col-md-2">
+              <div className="container col-md-5">
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
                 <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
