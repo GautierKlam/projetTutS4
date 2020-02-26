@@ -147,7 +147,7 @@ class App extends React.Component{
                </div>
 
                  <div className="col-md-offset-10">
-            <input type="image" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
+            <input type="image" class="test" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
             </div>
             </div>
             </div>
@@ -155,7 +155,7 @@ class App extends React.Component{
               <div className="container col-md-2">
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
-                <input type="image" src={img2} alt="croix.png" onClick={this.alerte2}/>
+                <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
              </p>
              </div>
              :null
