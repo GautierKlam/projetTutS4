@@ -3,8 +3,8 @@ import './App.css';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import img from "./loupe.png";
-import img2 from "./croix.png";
+import img from "./assets/loupe.png";
+import img2 from "./assets/croix.png";
 import {  iconPerson  } from './Icon';
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -87,12 +87,12 @@ class App extends React.Component{
     return (
   <body>
     <header>
-             {this.state.input==="apex"?
-                    <h1>t'es pas platine mdrrr</h1>
+             {this.state.input==="te"?
+                    <h1>test</h1>
                     :this.state.input.match(/^c.*$/)?
-                    <h1> cathedrale </h1>:
+                    <h1>cathedrale </h1>:
                         this.state.input>""?
-             <h1>{this.state.input} fdp</h1>:null}
+             <h1>{this.state.input}autre</h1>:null}
              <div className="col-lg-4">
             <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
             </div>
