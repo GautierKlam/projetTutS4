@@ -6,7 +6,9 @@ import L from 'leaflet';
 import axios from 'axios';
 import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
+import img3 from "./assets/Logo.png";
 import {  iconPerson, iconMonument  } from './Icon';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -136,14 +138,26 @@ class App extends React.Component{
                     <h1>cathedrale</h1>:
                         this.state.input>""?
              <h1>{this.state.input}autre</h1>:null}
-             <div className="col-lg-4">
+             <div className="container col-md-9">
+             <div className="row">
+
+                <img class="left" src={img3} width="100px"/>
+                <div className="container col-md-5">
+               <h1>Lieux touristiques à Metz</h1>
+               </div>
+
+                 <div className="col-md-offset-10">
             <input type="image" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
             </div>
+            </div>
+            </div>
             {this.state.test> 0?
+              <div className="container col-md-2">
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
                 <input type="image" src={img2} alt="croix.png" onClick={this.alerte2}/>
              </p>
+             </div>
              :null
              }
     </header>
