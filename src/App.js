@@ -117,6 +117,30 @@ class App extends React.Component{
     }, 15000);*/
 	}
 
+  //---------------- FONCTION AFFICHER Description
+
+  description(props) {
+    return(
+      <div class="App-description">
+        <p>{props.nom}</p>
+
+        <img src={props.img1}/>
+        <img src={props.img2}/>
+        <img src={props.img3}/>
+        <img src={props.img4}/>
+
+        <p>{props.text}</p>
+
+        <p>{props.adresse}</p>
+      </div>
+    )
+   }
+
+     DisplayDesc(x) {
+       return( <description id = {x.id} nom = {x.nom} img1 = {x.img1} img2 = {x.img2} img3 = {x.img3} img4 = {x.img4} desc = {x.desc} adresse = {x.adresse}/>);
+     }
+
+
 //---------------- FONCTION BARRE DE RECHERCHE
 
     alerte = () => {
@@ -155,18 +179,14 @@ class App extends React.Component{
    vibre = () => {
      window.navigator.vibrate(3000);
    }
-
-
-
-//---------------- FONCTION RENDER
   render() {
 
     //--------------VARIABLES DE TEST ----------------
     const monuments = [
-      { id: 1, nom: "monum1", lat: 49, longit: 6, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Fgoodguideinrio.com%2Fwp-content%2Fuploads%2F2018%2F03%2Fgood-guide-in-rio-city-tour-rio-3-450x450.jpg&imgrefurl=https%3A%2F%2Fgoodguideinrio.com%2Fcategorie-produit%2Fcartes-postales%2F&tbnid=78xiSy_C3Sh-bM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygAegUIARDKAQ..i&docid=EXgEpF14-S2wiM&w=450&h=450&itg=1&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygAegUIARDKAQ" },
-      { id: 2, nom: "monum2", lat: 48, longit: 7, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.la-coursive.com%2Fwp-content%2Fuploads%2F2020%2F01%2Fparis-2-450x450.png&imgrefurl=https%3A%2F%2Fwww.la-coursive.com%2Fcinema%2Flequipe-de-secours-en-route-pour-laventure-janis-cimermanis%2F&tbnid=2K7nKjj5PGA6HM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygFegUIARDUAQ..i&docid=zolR59PxtzH6rM&w=450&h=450&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygFegUIARDUAQ" },
-      { id: 3, nom: "monum3", lat: 49, longit: 6, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Fstatic.cavissima.com%2Fpub%2Fmedia%2Fproducer%2Fimage%2Fresized%2F450x450%2Fclos_du_marquis_clos_l_oville_lascases.png&imgrefurl=https%3A%2F%2Fwww.cavissima.com%2Fachat-vin%2Fpar-regions%2Fbordeaux%2Fclos-du-marquis%2F&tbnid=wyki7Lh4eH8gwM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygIegUIARDaAQ..i&docid=kgjIe7e04jUO8M&w=450&h=450&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygIegUIARDaAQ" },
-      { id: 4, nom: "monum4", lat: 48, longit: 7, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Ftoulouseboutiques.com%2Fwp-content%2Fuploads%2F2019%2F03%2FBoutiques-Wilson-Toulouse-2-450x450.jpg&imgrefurl=https%3A%2F%2Ftoulouseboutiques.com%2Fcategory%2Ffrance%2Fpage%2F3%2F&tbnid=zV-tw9wxe7zGEM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygYegQIARAy..i&docid=ekZKjOwsDbPQVM&w=450&h=450&itg=1&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygYegQIARAy" },
+      { id: 1, nom: "monum1", lat: 49, longit: 6, desc: "desc1", img1:"https://goodguideinrio.com/wp-content/uploads/2018/03/good-guide-in-rio-city-tour-rio-3-450x450.jpg", img2: "http://www.jcmsolar.fr/wp-content/uploads/2018/06/Capture-d%E2%80%99%C3%A9cran-2018-06-05-%C3%A0-21.15.57-1024x798.png", img3: "https://maisons-prestige.com/wp-content/uploads/2017/03/A.jpg", img4: "https://www.solutio-travaux.com/wp-content/uploads/2018/12/extension-de-maison-tarn-2-w1400-1.jpg", adresse: "OK LE TEST DE L'ADRESSE" },
+      { id: 2, nom: "monum2", lat: 48, longit: 6, desc: "desc2", img:"https://www.merveilles-du-monde.com/Statue-de-la-Liberte/images/Vignettes/Photos/Liberty-island-V.jpg" },
+      { id: 3, nom: "monum3", lat: 49, longit: 7, desc: "desc3", img:"https://stileex.xyz/wp-content/uploads/2019/06/7-Merveilles-du-monde-11Machu-450x300.jpg.webp" },
+      { id: 4, nom: "monum4", lat: 48, longit: 7, desc: "desc4", img:"https://image.noelshack.com/fichiers/2019/49/4/1575562067-3apw27-1.png" },
     ]
     //-------------- FIN DES VARIABLES DE TEST ----------------
     this.findCoordinates();
@@ -216,7 +236,7 @@ class App extends React.Component{
         <Marker position={posi_actu} icon={ iconPerson }>
         </Marker>
         {
-          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} /*onClick={this.displayInfo(x)}*/ ></Marker>)
+          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} onClick={this.DisplayDesc(x)} ></Marker>)
         }
       </Map>
     </body>
