@@ -29,12 +29,24 @@ class App extends React.Component{
     }
   }
 
+//---------------- FONCTION GEOLOCALISATION
+
+  findCoordinates = () => {
+		navigator.geolocation.getCurrentPosition(
+			position => {
+        console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
+				this.setState({ lat: position.coords.latitude,
+                        long: position.coords.longitude
+                      })
+			}
+		);
+	};
 
 //---------------- FONCTION BARRE DE RECHERCHE
 
     alerte = () => {
         this.setState ({
-        test: 1
+        test: 1w
         });
     }
     alerte2 = () => {
@@ -49,10 +61,11 @@ research = () => {
     });
    }
 
+//---------------- FONCTION RENDER
 
-//---------------- FIN BARRE DE RECHERCHE
   render() {
-    const position = [this.state.lat, this.state.lng];
+    this.findCoordinates();
+    var posi_actu = [this.state.lat, this.state.long];
     return (
   <body>
     <header>
@@ -78,7 +91,7 @@ research = () => {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <Marker position={position}>
+        <Marker position={posi_actu}>
           <Popup>
             <span>Vous êtes ici</span>
           </Popup>
