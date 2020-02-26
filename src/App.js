@@ -3,8 +3,8 @@ import './App.css';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import img from "./loupe.png";
-import img2 from "./croix.png";
+import img from "./assets/loupe.png";
+import img2 from "./assets/croix.png";
 import axios from 'axios';
 import {  iconPerson  } from './Icon';
 
@@ -41,6 +41,7 @@ class App extends React.Component{
             });
         })
     }
+    
 //---------------- FONCTION GEOLOCALISATION
 
   findCoordinates = () => {
@@ -90,7 +91,9 @@ class App extends React.Component{
    vibre = () => {
      window.navigator.vibrate(3000);
    }
+
 //---------------- FONCTION RENDER
+
   render() {
     console.log(this.state.description);
     this.findCoordinates();
@@ -103,10 +106,12 @@ class App extends React.Component{
              {this.state.input==="te"?
                     <h1>test</h1>
                     :this.state.input.match(/^c.*$/)?
-                    <h1> cathedrale </h1>:
+                    <h1>cathedrale </h1>:
                         this.state.input>""?
-                 <h1>{this.state.input} autre</h1>:null}
-                <input type="image" src={img} alt="loupe.png" onClick={this.alerte}/>
+               <h1>{this.state.input}autre</h1>:null}
+               <div className="col-lg-4">
+                 <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
+                </div>
             {this.state.test> 0?
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
