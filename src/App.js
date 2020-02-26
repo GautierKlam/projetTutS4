@@ -80,6 +80,15 @@ class App extends React.Component{
      window.navigator.vibrate(3000);
    }
 
+
+//---------------- FONCTIONS RECUPERER LES DONNEES
+
+
+   test = () => {
+      this.setState ({
+        all : this.state.all.split(' / ')
+      });
+   }
 //---------------- FONCTION RENDER
   render() {
 
@@ -97,6 +106,9 @@ class App extends React.Component{
     return (
   <body>
     <header>
+        <p> il y a {this.state.all.length} element</p>
+             {this.state.input==="te"?
+                    <h1>test</h1>
              {this.state.input==="test"?
                     <h1>tes</h1>
                     :this.state.input.match(/^c.*$/)?
@@ -104,7 +116,7 @@ class App extends React.Component{
                         this.state.input>""?
              <h1>{this.state.input}autre</h1>:null}
              <div className="col-lg-4">
-            <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
+            <input type="image" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
             </div>
             {this.state.test> 0?
              <p>
