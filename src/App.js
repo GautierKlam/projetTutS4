@@ -85,10 +85,10 @@ class App extends React.Component{
 
     //--------------VARIABLES DE TEST ----------------
     const monuments = [
-      { id: 1, lat: 49, longit: 6 },
-      { id: 2, lat: 48, longit: 7 },
-      { id: 3, lat: 49, longit: 6 },
-      { id: 4, lat: 48, longit: 7 },
+      { id: 1, nom: "monum1", lat: 49, longit: 6, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Fgoodguideinrio.com%2Fwp-content%2Fuploads%2F2018%2F03%2Fgood-guide-in-rio-city-tour-rio-3-450x450.jpg&imgrefurl=https%3A%2F%2Fgoodguideinrio.com%2Fcategorie-produit%2Fcartes-postales%2F&tbnid=78xiSy_C3Sh-bM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygAegUIARDKAQ..i&docid=EXgEpF14-S2wiM&w=450&h=450&itg=1&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygAegUIARDKAQ" },
+      { id: 2, nom: "monum2", lat: 48, longit: 7, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.la-coursive.com%2Fwp-content%2Fuploads%2F2020%2F01%2Fparis-2-450x450.png&imgrefurl=https%3A%2F%2Fwww.la-coursive.com%2Fcinema%2Flequipe-de-secours-en-route-pour-laventure-janis-cimermanis%2F&tbnid=2K7nKjj5PGA6HM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygFegUIARDUAQ..i&docid=zolR59PxtzH6rM&w=450&h=450&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygFegUIARDUAQ" },
+      { id: 3, nom: "monum3", lat: 49, longit: 6, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Fstatic.cavissima.com%2Fpub%2Fmedia%2Fproducer%2Fimage%2Fresized%2F450x450%2Fclos_du_marquis_clos_l_oville_lascases.png&imgrefurl=https%3A%2F%2Fwww.cavissima.com%2Fachat-vin%2Fpar-regions%2Fbordeaux%2Fclos-du-marquis%2F&tbnid=wyki7Lh4eH8gwM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygIegUIARDaAQ..i&docid=kgjIe7e04jUO8M&w=450&h=450&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygIegUIARDaAQ" },
+      { id: 4, nom: "monum4", lat: 48, longit: 7, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Ftoulouseboutiques.com%2Fwp-content%2Fuploads%2F2019%2F03%2FBoutiques-Wilson-Toulouse-2-450x450.jpg&imgrefurl=https%3A%2F%2Ftoulouseboutiques.com%2Fcategory%2Ffrance%2Fpage%2F3%2F&tbnid=zV-tw9wxe7zGEM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygYegQIARAy..i&docid=ekZKjOwsDbPQVM&w=450&h=450&itg=1&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygYegQIARAy" },
     ]
     //-------------- FIN DES VARIABLES DE TEST ----------------
     this.findCoordinates();
@@ -97,12 +97,12 @@ class App extends React.Component{
     return (
   <body>
     <header>
-             {this.state.input==="apex"?
-                    <h1>t'es pas platine mdrrr</h1>
+             {this.state.input==="test"?
+                    <h1>tes</h1>
                     :this.state.input.match(/^c.*$/)?
-                    <h1> cathedrale </h1>:
+                    <h1>cathedrale</h1>:
                         this.state.input>""?
-             <h1>{this.state.input} fdp</h1>:null}
+             <h1>{this.state.input}autre</h1>:null}
              <div className="col-lg-4">
             <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
             </div>
@@ -125,9 +125,10 @@ class App extends React.Component{
           </Popup>
         </Marker>
         {
-          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} ></Marker>)
+          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} ></Marker>)
         }
       </Map>
+
     </body>
     );
   }
