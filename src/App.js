@@ -28,8 +28,19 @@ class App extends React.Component{
       vibre: 0,
       all:"",
       input:"",
-      nom:"",
-      description:""
+      id:[],
+      nom:[],
+      lon:[],
+      listLat:[],
+      description:[],
+      adresse:[],
+      lien1:[],
+      lien2:[],
+      lien3:[],
+      lien4:[],
+      arrayMonument:[],
+      arrayElement:[],
+      result:[]
     }
   }
 
@@ -37,8 +48,47 @@ class App extends React.Component{
         axios.get('https://devweb.iutmetz.univ-lorraine.fr/~giuliani6u/ProjetS4/API/post/all.php', {headers: {"Access-Control-Allow-Origin": "*"}})
         .then(res=> {
             this.setState({
-                  all: res.data
+                  all: res.data,
             });
+            this.setState({
+            arrayMonument : this.state.all.split(' * ')
+            });
+            let arrayNom=[];
+            let arrayID=[];
+            let arrayDescription=[];
+            let arrayLon=[];
+            let arrayLat=[];
+            let arrayAdresse=[];
+            let arrayLien1=[];
+            let arrayLien2=[];
+            let arrayLien3=[];
+            let arrayLien4=[];
+            let arrayTake=[];
+            for (let i=0;i<this.state.arrayMonument.length;i++){
+                arrayTake = this.state.arrayMonument[i].split(' / ')
+                arrayNom[i]=arrayTake[1];
+                arrayID[i]=arrayTake[0];
+                arrayLon[i]=arrayTake[2];
+                arrayLat[i]=arrayTake[3];
+                arrayDescription[i]=arrayTake[4];
+                arrayAdresse[i]=arrayTake[5];
+                arrayLien1[i]=arrayTake[6];
+                arrayLien2[i]=arrayTake[7];
+                arrayLien3[i]=arrayTake[8];
+                arrayLien4[i]=arrayTake[9];
+                }
+              this.setState ({
+                 id: arrayID,
+                 nom: arrayNom,
+                 lon:arrayLon,
+                 listLat:arrayLat,
+                 description:arrayDescription,
+                 adresse:arrayAdresse,
+                 lien1:arrayLien1,
+                 lien2:arrayLien2,
+                 lien3:arrayLien3,
+                 lien4:arrayLien4
+              });
         })
     }
 
@@ -82,24 +132,31 @@ class App extends React.Component{
     }
 
     research = () => {
-      this.setState ({
-        input : document.getElementById('search').value
-      });
-   }
+    let j=0;
+    let array=[];
+    let s=document.getElementById('search').value;
+    let a="z";
+    if(s.match(/c.*/))
+     console.log("cool");
+     else
+     console.log("ntm");
+      for(let i=0;i<this.state.nom.length;i++){
+      if(this.state.nom[i]===document.getElementById('search').value){
+      array[j]=this.state.nom[i];
+      j=j+1;
+      }
+    }
+    this.setState ({
+        result: array
+    });
+ }
 
    vibre = () => {
      window.navigator.vibrate(3000);
    }
 
 
-//---------------- FONCTIONS RECUPERER LES DONNEES
 
-
-   test = () => {
-      this.setState ({
-        all : this.state.all.split(' / ')
-      });
-   }
 //---------------- FONCTION RENDER
   render() {
 
@@ -117,22 +174,16 @@ class App extends React.Component{
     return (
   <body>
     <header>
-        <p> il y a {this.state.all.length} element</p>
-             {this.state.input==="te"?
-                    <h1>test</h1>
-             :this.state.input==="test"?
-                    <h1>tes</h1>
-                    :this.state.input.match(/^c.*$/)?
-                    <h1>cathedrale</h1>:
-                        this.state.input>""?
-             <h1>{this.state.input}autre</h1>:null}
              <div className="col-lg-4">
-            <input type="image" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
+                <input type="image" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
+                <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
             </div>
             {this.state.test> 0?
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
                 <input type="image" src={img2} alt="croix.png" onClick={this.alerte2}/>
+                {this.state.result.length>=""?
+                    <h1>{this.state.result}</h1>:<p>pas de resultat</p>}
              </p>
              :null
              }
