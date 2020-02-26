@@ -3,8 +3,8 @@ import './App.css';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import img from "./loupe.png";
-import img2 from "./croix.png";
+import img from "./assets/loupe.png";
+import img2 from "./assets/croix.png";
 import {  iconPerson, iconMonument  } from './Icon';
 
 delete L.Icon.Default.prototype._getIconUrl;
