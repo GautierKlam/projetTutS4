@@ -6,11 +6,13 @@ import L from 'leaflet';
 import axios from 'axios';
 import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
+import iconPersonMini from "./assets/marker.png";
 import logo from "./assets/Logo.png";
 import {  iconPerson, iconMonument  } from './Icon';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-notifications/lib/notifications.css';
+import Description from './Description';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -45,7 +47,10 @@ class App extends React.Component{
       arrayElement:[],
       result:[],
       prox: 1,
-      bool: false,
+      descnum: -1,
+      pos_map: [0,0],
+      pos_actu: [0,0],
+      pos_init: 1
     }
   }
 
@@ -56,7 +61,7 @@ class App extends React.Component{
                   all: res.data,
             });
             this.setState({
-            arrayMonument : this.state.all.split(' * ')
+              arrayMonument : this.state.all.split(' * ')
             });
             let arrayNom=[];
             let arrayID=[];
@@ -104,56 +109,36 @@ class App extends React.Component{
 			position => {
         //console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
 				this.setState({ lat: position.coords.latitude,
-                        lng: position.coords.longitude
+                        lng: position.coords.longitude,
+                        pos_actu: [this.state.lat, this.state.lng]
                       })
 			}
 		);*/
-    navigator.geolocation.watchPosition(
+   navigator.geolocation.watchPosition(
 			position => {
-        console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
-				this.setState({ lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                      });
-			}
+        this.setState({ lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        pos_actu: [position.coords.latitude, position.coords.longitude]
+                      });}
 		);
-    /*setTimeout(() => {
-      navigator.geolocation.clearWatch(refreshMap);
-    }, 15000);*/
 	}
+
+  createNotification = () => {
+        window.navigator.vibrate(3000);
+        console.log("vibre create notif");
+        NotificationManager.info(this.userInProximity().lieu.nom);
+        this.setState({prox: 0});
+  }
+
+  //---------------- FONCTION BOOLEENNE
 
   testProx(){
     return (this.state.prox == 1);
   }
 
-  createNotification = () => {
-        window.navigator.vibrate(3000);
-        console.log("vibre create notif", this.state.prox);
-        NotificationManager.info(this.userInProximity().lieu.nom);
-        this.setState({prox: 0});
+  displaydesc() {
+    return this.state.descnum != -1;
   }
-
-  //---------------- FONCTION AFFICHER Description
-
-  description(props) {
-    return(
-      <div class="App-description">
-        <p>{props.nom}</p>
-
-        <img src={props.img1}/>
-        <img src={props.img2}/>
-        <img src={props.img3}/>
-        <img src={props.img4}/>
-
-        <p>{props.text}</p>
-
-        <p>{props.adresse}</p>
-      </div>
-    )
-   }
-
-     DisplayDesc(x) {
-       return( <description id = {this.state.id[x]} nom = {this.state.nom[x]} img1 = {this.state.lien1[x]} img2 = {this.state.lien2[x]} img3 = {this.state.lien3[x]} img4 = {this.state.lien4[x]} desc = {this.state.description[x]} adresse = {this.state.adresse[x]}/>);
-     }
 
 //---------------- FONCTION BARRE DE RECHERCHE
 
@@ -163,63 +148,43 @@ class App extends React.Component{
         });
     }
 
-    alerte2 = () => {
+    alerte2 = (id) => {
         this.setState ({
           test: 0,
-          input:""
+          input: "",
+          descnum: id
+        });
+    }
+
+    alerte3 = () => {
+        this.setState ({
+          test: 0,
+          input: ""
         });
     }
 
     research = () => {
     let j=0;
     let array=[];
-    let s=document.getElementById('search').value;
-    let a="z";
-    if(s.match(/c.*/))
-     console.log("cool");
-     else
-     console.log("ntm");
+    let str=document.getElementById('search').value;
+    str=str.toLowerCase();
       for(let i=0;i<this.state.nom.length;i++){
-      if(this.state.nom[i]===document.getElementById('search').value){
-      array[j]=this.state.nom[i];
-      j=j+1;
-      }
+          let rech=""+this.state.nom[i];
+          rech=rech.toLowerCase();
+          if(rech.includes(str)){
+              array[j]= {
+                nom: this.state.nom[i],
+                id: this.state.id[i]
+              };
+              j=j+1;
+          }
     }
     this.setState ({
         result: array
     });
  }
 
-
-/*
-   userInProximity(){
-
-  //var a=this.state.lat
-  //var b=this.state.lng
-
-  var a=this.state.listLat[2]
-  var b=this.state.lon[2]
-  var tab=[]
-  var lieu=null
-  var prox=false
-
-  for(let i=0;i<this.state.id.length;i++)
-    tab[i] = {nom: this.state.nom[i], desc: this.state.description[i], lat: this.state.listLat[i], lng:this.state.lon[i]}
-
-  var tab2 = tab.map(x => a>x.lat-0.001 && a<x.lat+0.001 && b<x.lng+0.001 && b>x.lng-0.001)     //20metre(1" à priori)
-
-  if(tab2.includes(true) && this.state.bool == false){
-    lieu = tab[tab2.indexOf(true)]
-    prox = true
-    this.setState({bool:true})
-    return ({lieu:lieu, prox :prox})
-  }
-  else if (tab2.includes(false)){
-    this.state.bool= false
-  }
-  return ({lieu:lieu, prox :false})
-
-}*/
+//---------------- FONCTION BARRE DE DETECTION DE PROXIMITE
 
 userInProximity(){
   var a=this.state.lat
@@ -244,6 +209,8 @@ userInProximity(){
     return this.state.prox === 1;
   }
 
+//---------------- FONCTION D'AFFICHAGE
+
   render() {
     var monum = []
     var x = 0
@@ -252,19 +219,9 @@ userInProximity(){
     }
 
     this.findCoordinates();
-    var posi_actu = [this.state.lat, this.state.lng];
-    /*<p> il y a {this.state.all.length} element</p>*/
-    return (
+   return (
       <body>
-        <header>
-             {this.state.input==="te"?
-                    <h1>test</h1>
-              :this.state.input==="test"?
-                    <h1>tes</h1>
-              :this.state.input.match(/^c.*$/)?
-                    <h1>cathedrale</h1>:
-                        this.state.input>""?
-                          <h1>{this.state.input}autre</h1>:null}
+        <header class="bg-info">
              <div className="container col-md-9">
               <div className="row">
               <img class="left" src={logo} width="7%"/>
@@ -280,50 +237,63 @@ userInProximity(){
               <div className="container col-md-5">
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
-                <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
-                {this.state.result.length>=""?
-                    <h1>{this.state.result}</h1>:<p>pas de resultat</p>}
+                <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte3}/>
+                {this.state.result.length==""?
+                    null:this.state.result.length>=""?
+                         <p>{this.state.result.map(result => <input type="button" align="center" src={result.nom} value={result.nom} onClick={() => this.alerte2(result.id)}/>
+                         )}</p>:<p>pas de resultat</p>}
              </p>
              </div>
              :null
              }
              <NotificationContainer/>
     </header>
-
-      <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
+      <Map class="map1" ref={(ref) => { this.map = ref}}
+      center={} zoom={this.state.zoom} style={{height: '850px'}} maxZoom='19.5' minZoom='4'
+      onMove={() => this.setState({pos_init: 0})}
+      onZoom={() => this.setState({zoom: this.map.leafletElement.getZoom()})}>
+      {console.log("coo : ", this.state.pos_map)}
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <Marker position={posi_actu} icon={ iconPerson }>
+        <Marker position={this.state.pos_actu} icon={ iconPerson }>
+        <Popup>
+          Vous êtes ici !
+        </Popup>
         </Marker>
-        {
-           monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} /* onClick={this.DisplayDesc(x.id)} */ ></Marker>)
-          }
-        }
-
+        {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1})}></Marker>)}
       </Map>
     <footer>
-    {console.log(this.state.prox)}
+    <input type="image" align="center" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={() => this.setState ({pos_init: 1, zoom: 17})}/>
+    {this.displaydesc()?
+      <div class="desc">
+          <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
+          <Description id = {this.state.id[this.state.descnum]}
+                      nom = {this.state.nom[this.state.descnum]}
+                      img1 = {this.state.lien1[this.state.descnum]}
+                      img2 = {this.state.lien2[this.state.descnum]}
+                      img3 = {this.state.lien3[this.state.descnum]}
+                      img4 = {this.state.lien4[this.state.descnum]}
+                      text = {this.state.description[this.state.descnum]}
+                      adresse = {this.state.adresse[this.state.descnum]}/>
+        </div>
+        :
+        null
+    }
       {this.userInProximity().prox?
-        //() => this.setState({prox: 1}),
-        //console.log(this.state.prox),
-        //this.createNotification(p),
         (this.utiliser()?
           this.createNotification()
         :
           null)
         :
-        () => this.setState({prox: 1}),
-        <div className="App-NoProximity">
-          <p> Je ne suis pas à proximité d'un monument </p>
-        </div>
+        () => this.setState({prox: 1})
       }
-      {console.log(this.state.prox)}
     </footer>
     </body>
     );
   }
+
 }
 
 export default App;

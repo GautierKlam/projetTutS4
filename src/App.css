@@ -1,14 +1,60 @@
+.img{
+  width:200px;
+  margin-right: 10px;
+}
+.map{
+  position: relative;
+  z-index: -1;
+}
+.desc{
+  position: absolute;
+  background-color: white;
+
+  z-index: 10;
+}
 .App {
   text-align: center;
+}
+.leaflet-div-icon{
+  border: none;
+  background: none;
 }
 .marge{
   margin-right: 100px;
 }
-.test {
-    width: 60%;
+@media screen and (max-width: 480px) {
+  .maptest{
+    height:60px;
+  }
+      h1{
+        font-size: 20px;
+        float: none;
+      }
+      .test1{
+        width:5%;
+      }
+      .test{
+        width:30%;
+        height:80%;
+        float: right;
+      }
+      .test3{
+        width:15%;
+        height:15%;
+      }
+    }
+    @media screen and (min-width: 480px) {
+.test3{
+  width:7%;
+  height:7%;
+}
+.test{
+  width:60%;
+  height:100%;
 }
 .test1 {
     width: 2%;
+}
 }
 input[type='search'] {
     width: 75%;
