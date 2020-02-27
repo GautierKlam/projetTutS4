@@ -276,7 +276,7 @@ userInProximity(){
                 <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte3}/>
                 {this.state.result.length==""?
                     null:this.state.result.length>=""?
-                         <p>{this.state.result.map(result => <input type="button" align="center" src={result.nom} value={result.nom} onClick={() => this.alerte2(result.id)}/>
+                         <p>{this.state.result.map(result => <input type="button" align="center" src={result.nom} value={result.nom} onClick={() => this.alerte2(result.id-1)}/>
                          )}</p>:<p>pas de resultat</p>}
              </p>
              </div>
