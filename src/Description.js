@@ -4,7 +4,6 @@ class Description extends React.Component{
 
   constructor(props) {
       super(props);
-
       this.state = {
           id: "",
           nom: "",
@@ -20,15 +19,15 @@ class Description extends React.Component{
   render() {
     return(
       <div class="App-description">
-        <p>{this.state.nom}</p>
-        <img src={this.state.img1}/>
-        <img src={this.state.img2}/>
-        <img src={this.state.img3}/>
-        <img src={this.state.img4}/>
+        <p>{this.props.nom}</p>
+        <img src={this.props.img1}/>
+        <img src={this.props.img2}/>
+        <img src={this.props.img3}/>
+        <img src={this.props.img4}/>
 
-        <p>{this.state.text}</p>
+        <p>{this.props.text}</p>
 
-        <p>{this.state.adresse}</p>
+        <p>{this.props.adresse}</p>
       </div>
     )
   }

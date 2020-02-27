@@ -8,7 +8,8 @@ import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
 import logo from "./assets/Logo.png";
 import {  iconPerson, iconMonument  } from './Icon';
-import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Description from './Description';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -42,7 +43,8 @@ class App extends React.Component{
       lien4:[],
       arrayMonument:[],
       arrayElement:[],
-      result:[]
+      result:[],
+      descnum: -1
     }
   }
 
@@ -53,7 +55,7 @@ class App extends React.Component{
                   all: res.data,
             });
             this.setState({
-            arrayMonument : this.state.all.split(' * ')
+              arrayMonument : this.state.all.split(' * ')
             });
             let arrayNom=[];
             let arrayID=[];
@@ -120,27 +122,6 @@ class App extends React.Component{
 
   //---------------- FONCTION AFFICHER Description
 
-  description(props) {
-    return(
-      <div class="App-description">
-        <p>{props.nom}</p>
-
-        <img src={props.img1}/>
-        <img src={props.img2}/>
-        <img src={props.img3}/>
-        <img src={props.img4}/>
-
-        <p>{props.text}</p>
-
-        <p>{props.adresse}</p>
-      </div>
-    )
-   }
-
-     DisplayDesc(x) {
-       return( <description id = {this.state.id[x]} nom = {this.state.nom[x]} img1 = {this.state.lien1[x]} img2 = {this.state.lien2[x]} img3 = {this.state.lien3[x]} img4 = {this.state.lien4[x]} desc = {this.state.description[x]} adresse = {this.state.adresse[x]}/>);
-     }
-
      vibre = () =>{
     if (this.state.vibre == 0){
       window.navigator.vibrate(3000);
@@ -203,7 +184,6 @@ class App extends React.Component{
 }
 
   render() {
-
     var monum = []
     for(let i=0;i<this.state.id.length -1 ;i++){
       monum[i] = {id: this.state.id[i], latitude: this.state.listLat[i], longitude: this.state.lon[i]}
@@ -216,7 +196,6 @@ class App extends React.Component{
     return (
       <body>
         <header>
-
              {this.state.input==="te"?
                     <h1>test</h1>
               :this.state.input==="test"?
@@ -262,19 +241,30 @@ class App extends React.Component{
           Vous êtes ici !
         </Popup>
         </Marker>
-        {
-           monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} /* onClick={this.DisplayDesc(x.id)} */ ></Marker>)
-          }
-        }
+        {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id})}></Marker>)}
       </Map>
-
+      {this.displaydesc()?
+        <div class="desc">
+            <input type="image" class="test1" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
+            <Description id = {this.state.id[this.state.descnum]}
+                        nom = {this.state.nom[this.state.descnum]}
+                        img1 = {this.state.lien1[this.state.descnum]}
+                        img2 = {this.state.lien2[this.state.descnum]}
+                        img3 = {this.state.lien3[this.state.descnum]}
+                        img4 = {this.state.lien4[this.state.descnum]}
+                        text = {this.state.description[this.state.descnum]}
+                        adresse = {this.state.adresse[this.state.descnum]}/>
+          </div>
+          :
+          null
+      }
     <footer>
       {this.userInProximity().prox?(
         this.vibre(),
         //window.navigator.vibrate(3000),      VIBRATION
         <div className="App-Proximity">
-          <p> Je suis à proximité de {this.userInProximity().lieu.nom}</p>
-          <p> {this.userInProximity().lieu.desc}</p>
+          //<p> Je suis à proximité de {this.userInProximity().lieu.nom}</p>
+          //<p> {this.userInProximity().lieu.desc}</p>
         </div>
         ):
         //this.setState({ vibre: 0}),
@@ -286,6 +276,12 @@ class App extends React.Component{
     </body>
     );
   }
+
+  displaydesc() {
+    console.log(this.state.descnum);
+    return this.state.descnum != -1;
+  }
+
 }
 
 export default App;
