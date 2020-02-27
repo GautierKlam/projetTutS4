@@ -160,17 +160,15 @@ class App extends React.Component{
     research = () => {
     let j=0;
     let array=[];
-    let s=document.getElementById('search').value;
-    let a="z";
-    if(s.match(/c.*/))
-     console.log("cool");
-     else
-     console.log("ntm");
+    let str=document.getElementById('search').value;
+    str=str.toLowerCase();
       for(let i=0;i<this.state.nom.length;i++){
-      if(this.state.nom[i]===document.getElementById('search').value){
-      array[j]=this.state.nom[i];
-      j=j+1;
-      }
+          let rech=""+this.state.nom[i];
+          rech=rech.toLowerCase();
+          if(rech.includes(str)){
+              array[j]=this.state.nom[i];
+              j=j+1;
+          }
     }
     this.setState ({
         result: array
@@ -241,8 +239,10 @@ class App extends React.Component{
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
                 <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
-                {this.state.result.length>=""?
-                    <h1>{this.state.result}</h1>:<p>pas de resultat</p>}
+                {this.state.result.length==""?
+                    null:this.state.result.length>=""?
+                         <p>{this.state.result.map(result=> <input type="button" align="center" src={result} value={result} onClick={this.alerte2}/>
+                         )}</p>:<p>pas de resultat</p>}
              </p>
              </div>
              :null
@@ -256,6 +256,9 @@ class App extends React.Component{
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
         <Marker position={posi_actu} icon={ iconPerson }>
+        <Popup>
+          Vous êtes ici !
+        </Popup>
         </Marker>
         {
            monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} /* onClick={this.DisplayDesc(x.id)} */ ></Marker>)
