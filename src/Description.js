@@ -5,7 +5,6 @@ class Description extends React.Component{
   constructor(props) {
       super(props);
       this.state = {
-          id: "",
           nom: "",
           img1: "",
           img2: "",

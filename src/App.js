@@ -107,14 +107,14 @@ class App extends React.Component{
                       })
 			}
 		);
-    const refreshMap = navigator.geolocation.watchPosition(
+    /*navigator.geolocation.watchPosition(
 			position => {
         console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
 				this.setState({ lat: position.coords.latitude,
                         lng: position.coords.longitude
                       })
 			}
-		);
+		);*/
     /*setTimeout(() => {
       navigator.geolocation.clearWatch(refreshMap);
     }, 15000);*/
@@ -187,7 +187,6 @@ class App extends React.Component{
     var monum = []
     for(let i=0;i<this.state.id.length -1 ;i++){
       monum[i] = {id: this.state.id[i], latitude: this.state.listLat[i], longitude: this.state.lon[i]}
-      console.log(monum[i]);
     }
 
     this.findCoordinates();
@@ -241,7 +240,7 @@ class App extends React.Component{
           Vous êtes ici !
         </Popup>
         </Marker>
-        {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id})}></Marker>)}
+        {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1})}></Marker>)}
       </Map>
       {this.displaydesc()?
         <div class="desc">
@@ -263,13 +262,10 @@ class App extends React.Component{
         this.vibre(),
         //window.navigator.vibrate(3000),      VIBRATION
         <div className="App-Proximity">
-          //<p> Je suis à proximité de {this.userInProximity().lieu.nom}</p>
-          //<p> {this.userInProximity().lieu.desc}</p>
         </div>
         ):
         //this.setState({ vibre: 0}),
         <div className="App-NoProximity">
-          <p> Je ne suis pas à proximité d'un monument </p>
         </div>
       }
     </footer>
@@ -278,7 +274,6 @@ class App extends React.Component{
   }
 
   displaydesc() {
-    console.log(this.state.descnum);
     return this.state.descnum != -1;
   }
 
