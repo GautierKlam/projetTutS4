@@ -267,7 +267,7 @@ class App extends React.Component{
                           <h1>{this.state.input}autre</h1>:null}
              <div className="container col-md-9">
               <div className="row">
-              <img class="left" src={logo} width="7%"/>
+              <img class="left" src={logo} class="test3"/>
                   <div className="container col-md-5">
                  <h1>Lieux touristiques à Metz</h1>
                  </div>
@@ -291,7 +291,7 @@ class App extends React.Component{
              }
 
     </header>
-
+    <div class="maptest">
       <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -307,6 +307,7 @@ class App extends React.Component{
           }
         }
       </Map>
+      </div>
 
     <footer>
       {this.userInProximity().prox?(
