@@ -28,7 +28,6 @@ class App extends React.Component{
       lat: 0,
       lng: 0,
       zoom: 17,
-      bounds: [10, 10],
       test: 0,
       vibre: 0,
       all:"",
@@ -47,9 +46,13 @@ class App extends React.Component{
       arrayElement:[],
       result:[],
       descnum: -1,
-      posi_map: [0,0],
-      pos_init: 1
+      pos_map: [0.0, 0.0],
+      pos_actu: [0.0, 0.0],
+      pos_init: 1,
+      compteur_btn: 2,
+      compteur_init: 0
     }
+    this.centrer = this.centrer.bind(this);
   }
 
       componentDidMount() {
@@ -97,36 +100,40 @@ class App extends React.Component{
                  lien3:arrayLien3,
                  lien4:arrayLien4
               });
-        })
+        });
+        const leafletMap = this.leafletMap.leafletElement;
+        leafletMap.on('zoomend', () => {
+          const updatedZoomLevel = leafletMap.getZoom();
+              this.handleZoomLevelChange(updatedZoomLevel);});
+        leafletMap.on('moveend', () => {
+          const updatedCenterPos = leafletMap.getCenter();
+              this.handleCenterPosChange(updatedCenterPos);});
     }
 
 //---------------- FONCTION GEOLOCALISATION
 
+firstCoordinates = () => {
+  navigator.geolocation.getCurrentPosition (
+    position => {
+      this.setState({pos_map: [position.coords.latitude, position.coords.longitude]})
+    }
+  );
+}
+
   findCoordinates = () => {
-		/*navigator.geolocation.getCurrentPosition (
-			position => {
-        //console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
-				this.setState({ lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                      })
-			}
-		);*/
    navigator.geolocation.watchPosition(
 			position => {
         console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
 				this.setState({ lat: position.coords.latitude,
-                        lng: position.coords.longitude
+                        lng: position.coords.longitude,
+                        pos_actu: [position.coords.latitude, position.coords.longitude]
                       })
-			}
-		);
-    /*setTimeout(() => {
-      navigator.geolocation.clearWatch(refreshMap);
-    }, 15000);*/
+			})
 	}
 
   //---------------- FONCTION VIBRE
 
-     vibre = () =>{
+     vibre = () => {
     if (this.state.vibre == 0){
       window.navigator.vibrate(3000);
       this.setState({ vibre: 1});
@@ -201,16 +208,31 @@ class App extends React.Component{
 
 }
 
-//---------------- FONCTION BARRE DE CENTRAGE
-
-center = () => {
-    this.setState ({
-       pos_init: 1,
-       zoom: 17
-    });
-}
-
 //---------------- FONCTION D'AFFICHAGE
+
+    handleZoomLevelChange(newZoomLevel) {
+        this.setState({ zoom: newZoomLevel });
+    }
+
+    handleCenterPosChange = (newCenterPos) => {
+          if(this.state.compteur_btn < 4) {
+            this.setState({compteur_btn: this.state.compteur_btn +1})
+          } else {
+            this.setState({ pos_map: newCenterPos, pos_init: 0 });
+          }
+    }
+
+    centrer = () => {
+      const leafletMap = this.leafletMap.leafletElement;
+      this.setState ({
+         pos_init: 1,
+         zoom: 17,
+         pos_map: [this.state.lat, this.state.lng],
+         compteur_btn: 0
+      });
+      leafletMap.setZoom(17);
+      leafletMap.panTo(this.state.pos_actu);
+    }
 
   render() {
     var monum = []
@@ -219,7 +241,13 @@ center = () => {
     }
 
     this.findCoordinates();
-    var posi_actu = [this.state.lat, this.state.lng];
+
+    if(this.state.compteur_init < 2) {
+      this.setState({
+        compteur_init: 2
+      });
+      this.firstCoordinates();
+    }
 
     return (
       <body>
@@ -249,21 +277,19 @@ center = () => {
              :null
              }
     </header>
-      <Map class="map1" ref={(ref) => { this.map = ref}} center={this.displaymove()? posi_actu: this.state.pos_map} zoom={this.state.zoom} style={{height: '850px'}} maxZoom='19.5' minZoom='4'
-      //onMove={() => this.setState({pos_init: 0, pos_map: this.map.leafletElement.getCenter()})}
-      onZoom={() => this.setState({zoom: this.map.leafletElement.getZoom()})}>
+      <Map class="map1" ref={ref => { this.leafletMap = ref}} center={this.state.pos_map} zoom={this.state.zoom} style={{height: '850px'}} maxZoom='19.5' minZoom='4'>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <Marker position={posi_actu} icon={ iconPerson }>
+        <Marker position={[this.state.lat, this.state.lng]} icon={ iconPerson }>
         <Popup>
           Vous êtes ici !
         </Popup>
         </Marker>
         {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1})}></Marker>)}
       </Map>
-      <input type="image" align="center" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.center}/>
+      <input type="image" align="center" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.centrer}/>
       {this.displaydesc()?
         <div class="desc">
             <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
@@ -293,10 +319,6 @@ center = () => {
     </footer>
     </body>
     );
-  }
-
-  displaymove() {
-    return this.state.pos_init === 1;
   }
 
   displaydesc() {
