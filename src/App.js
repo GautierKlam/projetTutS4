@@ -145,44 +145,6 @@ class App extends React.Component{
         });
     }
 
-     research = () => {
-     let j=0;
-     let array=[];
-     let str=document.getElementById('search').value;
-     str=str.toLowerCase();
-       for(let i=0;i<this.state.nom.length;i++){
-           let rech=""+this.state.nom[i];
-           rech=rech.toLowerCase();
-           if(rech.includes(str)){
-               array[j]=this.state.nom[i];
-               j=j+1;
-           }
-     }
-     this.setState ({
-         result: array
-     });
-  }
-
-
-   userInProximity(){
-  var a=this.state.lat
-  var b=this.state.lng
-  var tab=[]
-  var lieu=null
-  var prox=false
-
-  for(let i=0;i<this.state.id.length;i++)
-    tab[i] = {nom: this.state.nom[i], desc: this.state.description[i], lat: this.state.listLat[i], lng:this.state.lon[i]}
-
-  var tab2 = tab.map(x => a>x.lat-0.001 && a<x.lat+0.001 && b<x.lng+0.001 && b>x.lng-0.001)     //20metre(1" à priori)
-
-  if(tab2.includes(true)){
-    lieu = tab[tab2.indexOf(true)]
-    prox = true
-  }
-  return ({lieu:lieu, prox :prox})
-
-
     research = () => {
     let j=0;
     let array=[];
@@ -219,7 +181,6 @@ class App extends React.Component{
   }
   return ({lieu:lieu, prox :prox})
 
-
 }
 
   render() {
@@ -245,7 +206,7 @@ class App extends React.Component{
                           <h1>{this.state.input}autre</h1>:null}
              <div className="container col-md-9">
               <div className="row">
-              <img class="left" src={logo} class="test3"/>
+              <img class="left" src={logo} width="7%"/>
                   <div className="container col-md-5">
                  <h1>Lieux touristiques à Metz</h1>
                  </div>
@@ -269,7 +230,7 @@ class App extends React.Component{
              }
 
     </header>
-    <div class="maptest">
+
       <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
