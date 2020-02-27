@@ -164,7 +164,6 @@ class App extends React.Component{
         });
     }
 
-<<<<<<< HEAD
      research = () => {
      let j=0;
      let array=[];
@@ -202,7 +201,7 @@ class App extends React.Component{
   }
   return ({lieu:lieu, prox :prox})
 
-=======
+
     research = () => {
     let j=0;
     let array=[];
@@ -239,7 +238,7 @@ class App extends React.Component{
   }
   return ({lieu:lieu, prox :prox})
 
->>>>>>> 6c4bc8525cb8d76c9308543fba213238a14c9262
+
 }
 
   render() {
