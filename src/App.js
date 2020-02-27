@@ -164,6 +164,7 @@ class App extends React.Component{
         });
     }
 
+<<<<<<< HEAD
      research = () => {
      let j=0;
      let array=[];
@@ -201,6 +202,44 @@ class App extends React.Component{
   }
   return ({lieu:lieu, prox :prox})
 
+=======
+    research = () => {
+    let j=0;
+    let array=[];
+    let str=document.getElementById('search').value;
+    str=str.toLowerCase();
+      for(let i=0;i<this.state.nom.length;i++){
+          let rech=""+this.state.nom[i];
+          rech=rech.toLowerCase();
+          if(rech.includes(str)){
+              array[j]=this.state.nom[i];
+              j=j+1;
+          }
+    }
+    this.setState ({
+        result: array
+    });
+ }
+
+   userInProximity(){
+  var a=this.state.lat
+  var b=this.state.lng
+  var tab=[]
+  var lieu=null
+  var prox=false
+
+  for(let i=0;i<this.state.id.length;i++)
+    tab[i] = {nom: this.state.nom[i], desc: this.state.description[i], lat: this.state.listLat[i], lng:this.state.lon[i]}
+
+  var tab2 = tab.map(x => a>x.lat-0.001 && a<x.lat+0.001 && b<x.lng+0.001 && b>x.lng-0.001)     //20metre(1" à priori)
+
+  if(tab2.includes(true)){
+    lieu = tab[tab2.indexOf(true)]
+    prox = true
+  }
+  return ({lieu:lieu, prox :prox})
+
+>>>>>>> 6c4bc8525cb8d76c9308543fba213238a14c9262
 }
 
   render() {
@@ -242,8 +281,10 @@ class App extends React.Component{
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
                 <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
-                {this.state.result.length>=""?
-                    <h1>{this.state.result}</h1>:<p>pas de resultat</p>}
+                {this.state.result.length==""?
+                    null:this.state.result.length>=""?
+                         <p>{this.state.result.map(result=> <input type="button" align="center" src={result} value={result} onClick={this.alerte2}/>
+                         )}</p>:<p>pas de resultat</p>}
              </p>
              </div>
              :null
@@ -257,6 +298,9 @@ class App extends React.Component{
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
         <Marker position={posi_actu} icon={ iconPerson }>
+        <Popup>
+          Vous êtes ici !
+        </Popup>
         </Marker>
         {
            monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} /* onClick={this.DisplayDesc(x.id)} */ ></Marker>)
