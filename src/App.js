@@ -6,6 +6,7 @@ import L from 'leaflet';
 import axios from 'axios';
 import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
+import iconPersonMini from "./assets/marker.png";
 import logo from "./assets/Logo.png";
 import {  iconPerson, iconMonument  } from './Icon';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,6 +28,7 @@ class App extends React.Component{
       lat: 0,
       lng: 0,
       zoom: 17,
+      bounds: [10, 10],
       test: 0,
       vibre: 0,
       all:"",
@@ -44,7 +46,9 @@ class App extends React.Component{
       arrayMonument:[],
       arrayElement:[],
       result:[],
-      descnum: -1
+      descnum: -1,
+      posi_map: [0,0],
+      pos_init: 1
     }
   }
 
@@ -99,28 +103,28 @@ class App extends React.Component{
 //---------------- FONCTION GEOLOCALISATION
 
   findCoordinates = () => {
-		navigator.geolocation.getCurrentPosition (
+		/*navigator.geolocation.getCurrentPosition (
 			position => {
         //console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
 				this.setState({ lat: position.coords.latitude,
                         lng: position.coords.longitude
                       })
 			}
-		);
-    /*navigator.geolocation.watchPosition(
+		);*/
+   navigator.geolocation.watchPosition(
 			position => {
         console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
 				this.setState({ lat: position.coords.latitude,
                         lng: position.coords.longitude
                       })
 			}
-		);*/
+		);
     /*setTimeout(() => {
       navigator.geolocation.clearWatch(refreshMap);
     }, 15000);*/
 	}
 
-  //---------------- FONCTION AFFICHER Description
+  //---------------- FONCTION VIBRE
 
      vibre = () =>{
     if (this.state.vibre == 0){
@@ -138,10 +142,19 @@ class App extends React.Component{
         });
     }
 
-    alerte2 = () => {
+    alerte2 = (id) => {
         this.setState ({
           test: 0,
-          input:""
+          input: "",
+          descnum: id
+        });
+        console.log(id);
+    }
+
+    alerte3 = () => {
+        this.setState ({
+          test: 0,
+          input: ""
         });
     }
 
@@ -154,7 +167,10 @@ class App extends React.Component{
           let rech=""+this.state.nom[i];
           rech=rech.toLowerCase();
           if(rech.includes(str)){
-              array[j]=this.state.nom[i];
+              array[j]= {
+                nom: this.state.nom[i],
+                id: this.state.id[i]
+              };
               j=j+1;
           }
     }
@@ -162,6 +178,8 @@ class App extends React.Component{
         result: array
     });
  }
+
+//---------------- FONCTION BARRE DE DETECTION DE PROXIMITE
 
    userInProximity(){
   var a=this.state.lat
@@ -183,6 +201,17 @@ class App extends React.Component{
 
 }
 
+//---------------- FONCTION BARRE DE CENTRAGE
+
+center = () => {
+    this.setState ({
+       pos_init: 1,
+       zoom: 17
+    });
+}
+
+//---------------- FONCTION D'AFFICHAGE
+
   render() {
     var monum = []
     for(let i=0;i<this.state.id.length -1 ;i++){
@@ -191,18 +220,10 @@ class App extends React.Component{
 
     this.findCoordinates();
     var posi_actu = [this.state.lat, this.state.lng];
-    /*<p> il y a {this.state.all.length} element</p>*/
+
     return (
       <body>
         <header>
-             {this.state.input==="te"?
-                    <h1>test</h1>
-              :this.state.input==="test"?
-                    <h1>tes</h1>
-              :this.state.input.match(/^c.*$/)?
-                    <h1>cathedrale</h1>:
-                        this.state.input>""?
-                          <h1>{this.state.input}autre</h1>:null}
              <div className="container col-md-9">
               <div className="row">
               <img class="left" src={logo} width="7%"/>
@@ -218,19 +239,19 @@ class App extends React.Component{
               <div className="container col-md-5">
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
-                <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
+                <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte3}/>
                 {this.state.result.length==""?
                     null:this.state.result.length>=""?
-                         <p>{this.state.result.map(result=> <input type="button" align="center" src={result} value={result} onClick={this.alerte2}/>
+                         <p>{this.state.result.map(result => <input type="button" align="center" src={result.nom} value={result.nom} onClick={() => this.alerte2(result.id)}/>
                          )}</p>:<p>pas de resultat</p>}
              </p>
              </div>
              :null
              }
-
     </header>
-
-      <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
+      <Map ref={(ref) => { this.map = ref}} center={this.displaymove()? posi_actu: this.state.pos_map} zoom={this.state.zoom} style={{height: '850px'}} maxZoom='19.5' minZoom='4'
+      //onMove={() => this.setState({pos_init: 0, pos_map: this.map.leafletElement.getCenter()})}
+      onZoom={() => this.setState({zoom: this.map.leafletElement.getZoom()})}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -242,6 +263,7 @@ class App extends React.Component{
         </Marker>
         {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1})}></Marker>)}
       </Map>
+      <input type="image" align="center" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.center}/>
       {this.displaydesc()?
         <div class="desc">
             <input type="image" class="test1" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
@@ -271,6 +293,10 @@ class App extends React.Component{
     </footer>
     </body>
     );
+  }
+
+  displaymove() {
+    return this.state.pos_init === 1;
   }
 
   displaydesc() {
