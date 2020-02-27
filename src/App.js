@@ -6,10 +6,12 @@ import L from 'leaflet';
 import axios from 'axios';
 import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
-import iconPersonMini from "./assets/marker.png";
+import iconPersonMini from "./assets/recentre.png";
 import logo from "./assets/Logo.png";
 import {  iconPerson, iconMonument  } from './Icon';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'react-notifications/lib/notifications.css';
 import Description from './Description';
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -29,7 +31,6 @@ class App extends React.Component{
       lng: 0,
       zoom: 17,
       test: 0,
-      vibre: 0,
       all:"",
       input:"",
       id:[],
@@ -45,6 +46,7 @@ class App extends React.Component{
       arrayMonument:[],
       arrayElement:[],
       result:[],
+      prox: 1,
       descnum: -1,
       pos_map: [0.0, 0.0],
       pos_actu: [0.0, 0.0],
@@ -131,15 +133,16 @@ firstCoordinates = () => {
 			})
 	}
 
-  //---------------- FONCTION VIBRE
+  createNotification = () => {
+        window.navigator.vibrate(3000);
+        console.log("vibre create notif");
+        NotificationManager.info(this.userInProximity().lieu.nom);
+        this.setState({prox: 0});
+  }
 
-     vibre = () => {
-    if (this.state.vibre == 0){
-      window.navigator.vibrate(3000);
-      this.setState({ vibre: 1});
-      console.log("vibre");
-    }
-}
+  testProx(){
+    return (this.state.prox == 1);
+  }
 
 //---------------- FONCTION BARRE DE RECHERCHE
 
@@ -155,7 +158,6 @@ firstCoordinates = () => {
           input: "",
           descnum: id
         });
-        console.log(id);
     }
 
     alerte3 = () => {
@@ -188,7 +190,7 @@ firstCoordinates = () => {
 
 //---------------- FONCTION BARRE DE DETECTION DE PROXIMITE
 
-   userInProximity(){
+userInProximity(){
   var a=this.state.lat
   var b=this.state.lng
   var tab=[]
@@ -205,7 +207,6 @@ firstCoordinates = () => {
     prox = true
   }
   return ({lieu:lieu, prox :prox})
-
 }
 
 //---------------- FONCTION D'AFFICHAGE
@@ -213,6 +214,10 @@ firstCoordinates = () => {
     handleZoomLevelChange(newZoomLevel) {
         this.setState({ zoom: newZoomLevel });
     }
+
+  utiliser() {
+    return this.state.prox === 1;
+  }
 
     handleCenterPosChange = (newCenterPos) => {
           if(this.state.compteur_btn < 4) {
@@ -236,6 +241,7 @@ firstCoordinates = () => {
 
   render() {
     var monum = []
+    var x = 0
     for(let i=0;i<this.state.id.length -1 ;i++){
       monum[i] = {id: this.state.id[i], latitude: this.state.listLat[i], longitude: this.state.lon[i]}
     }
@@ -254,12 +260,12 @@ firstCoordinates = () => {
         <header class="bg-info">
              <div className="container col-md-9">
               <div className="row">
-              <img class="left" src={logo} width="7%"/>
+              <img class="test3" src={logo} />
                   <div className="container col-md-5">
                  <h1>Lieux touristiques à Metz</h1>
                  </div>
-                   <div className="col-md-offset-10">
-                    <input type="image" class="test" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
+                   <div className="">
+                    <input type="image" class="test" src={img} alt="loupe.png" onClick={this.alerte}/>
                 </div>
               </div>
             </div>
@@ -276,6 +282,7 @@ firstCoordinates = () => {
              </div>
              :null
              }
+             <NotificationContainer/>
     </header>
       <Map class="map1" ref={ref => { this.leafletMap = ref}} center={this.state.pos_map} zoom={this.state.zoom} style={{height: '850px'}} maxZoom='19.5' minZoom='4'>
         <TileLayer
@@ -290,31 +297,29 @@ firstCoordinates = () => {
         {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1})}></Marker>)}
       </Map>
       <input type="image" align="center" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.centrer}/>
-      {this.displaydesc()?
-        <div class="desc">
-            <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
-            <Description id = {this.state.id[this.state.descnum]}
-                        nom = {this.state.nom[this.state.descnum]}
-                        img1 = {this.state.lien1[this.state.descnum]}
-                        img2 = {this.state.lien2[this.state.descnum]}
-                        img3 = {this.state.lien3[this.state.descnum]}
-                        img4 = {this.state.lien4[this.state.descnum]}
-                        text = {this.state.description[this.state.descnum]}
-                        adresse = {this.state.adresse[this.state.descnum]}/>
-          </div>
-          :
-          null
-      }
     <footer>
-      {this.userInProximity().prox?(
-        this.vibre(),
-        //window.navigator.vibrate(3000),      VIBRATION
-        <div className="App-Proximity">
+    {this.displaydesc()?
+      <div class="desc">
+          <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
+          <Description id = {this.state.id[this.state.descnum]}
+                      nom = {this.state.nom[this.state.descnum]}
+                      img1 = {this.state.lien1[this.state.descnum]}
+                      img2 = {this.state.lien2[this.state.descnum]}
+                      img3 = {this.state.lien3[this.state.descnum]}
+                      img4 = {this.state.lien4[this.state.descnum]}
+                      text = {this.state.description[this.state.descnum]}
+                      adresse = {this.state.adresse[this.state.descnum]}/>
         </div>
-        ):
-        //this.setState({ vibre: 0}),
-        <div className="App-NoProximity">
-        </div>
+        :
+        null
+    }
+      {this.userInProximity().prox?
+        (this.utiliser()?
+          this.createNotification()
+        :
+          null)
+        :
+        () => this.setState({prox: 1})
       }
     </footer>
     </body>
