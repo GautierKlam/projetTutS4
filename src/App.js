@@ -141,6 +141,13 @@ class App extends React.Component{
        return( <description id = {this.state.id[x]} nom = {this.state.nom[x]} img1 = {this.state.lien1[x]} img2 = {this.state.lien2[x]} img3 = {this.state.lien3[x]} img4 = {this.state.lien4[x]} desc = {this.state.description[x]} adresse = {this.state.adresse[x]}/>);
      }
 
+     vibre = () =>{
+    if (this.state.vibre == 0){
+      window.navigator.vibrate(3000);
+      this.setState({ vibre: 1});
+      console.log("vibre");
+    }
+}
 
 //---------------- FONCTION BARRE DE RECHERCHE
 
@@ -175,10 +182,6 @@ class App extends React.Component{
     });
  }
 
-   vibre = () => {
-     window.navigator.vibrate(3000);
-   }
-
    userInProximity(){
   var a=this.state.lat
   var b=this.state.lng
@@ -209,7 +212,6 @@ class App extends React.Component{
 
     this.findCoordinates();
     var posi_actu = [this.state.lat, this.state.lng];
-    this.vibre();
     /*<p> il y a {this.state.all.length} element</p>*/
     return (
       <body>
@@ -265,18 +267,22 @@ class App extends React.Component{
           }
         }
       </Map>
-      {this.userInProximity().prox?(
 
-      //window.navigator.vibrate(3000),      VIBRATION
-      <div className="App-Proximity">
-      <p> Je suis à proximité de {this.userInProximity().lieu.nom}</p>
-      <p> {this.userInProximity().lieu.desc}</p>
-      </div>
-      ):
-      <div className="App-NoProximity">
-      <p> Je ne suis pas à proximité d'un monument </p>
-      </div>
+    <footer>
+      {this.userInProximity().prox?(
+        this.vibre(),
+        //window.navigator.vibrate(3000),      VIBRATION
+        <div className="App-Proximity">
+          <p> Je suis à proximité de {this.userInProximity().lieu.nom}</p>
+          <p> {this.userInProximity().lieu.desc}</p>
+        </div>
+        ):
+        //this.setState({ vibre: 0}),
+        <div className="App-NoProximity">
+          <p> Je ne suis pas à proximité d'un monument </p>
+        </div>
       }
+    </footer>
     </body>
     );
   }
