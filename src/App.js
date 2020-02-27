@@ -230,19 +230,21 @@ class App extends React.Component{
 
     </header>
 
-      <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
-        <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
-        />
-        <Marker position={posi_actu} icon={ iconPerson }>
-        <Popup>
-          Vous êtes ici !
-        </Popup>
-        </Marker>
-        {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1})}></Marker>)}
-      </Map>
+
+    <Map class="map1" center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
+      <TileLayer
+        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
+      />
+      <Marker position={posi_actu} icon={ iconPerson }>
+      <Popup>
+        Vous êtes ici !
+      </Popup>
+      </Marker>
+      {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1})}></Marker>)}
+    </Map>
       {this.displaydesc()?
+
         <div class="desc">
             <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
             <Description id = {this.state.id[this.state.descnum]}
