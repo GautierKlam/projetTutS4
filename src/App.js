@@ -164,25 +164,24 @@ class App extends React.Component{
         });
     }
 
-    research = () => {
-    let j=0;
-    let array=[];
-    let s=document.getElementById('search').value;
-    let a="z";
-    if(s.match(/c.*/))
-     console.log("cool");
-     else
-     console.log("ntm");
-      for(let i=0;i<this.state.nom.length;i++){
-      if(this.state.nom[i]===document.getElementById('search').value){
-      array[j]=this.state.nom[i];
-      j=j+1;
-      }
-    }
-    this.setState ({
-        result: array
-    });
- }
+     research = () => {
+     let j=0;
+     let array=[];
+     let str=document.getElementById('search').value;
+     str=str.toLowerCase();
+       for(let i=0;i<this.state.nom.length;i++){
+           let rech=""+this.state.nom[i];
+           rech=rech.toLowerCase();
+           if(rech.includes(str)){
+               array[j]=this.state.nom[i];
+               j=j+1;
+           }
+     }
+     this.setState ({
+         result: array
+     });
+  }
+
 
    userInProximity(){
   var a=this.state.lat
