@@ -8,7 +8,9 @@ import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
 import logo from "./assets/Logo.png";
 import {  iconPerson, iconMonument  } from './Icon';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'react-notifications/lib/notifications.css';
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -27,7 +29,6 @@ class App extends React.Component{
       lng: 0,
       zoom: 17,
       test: 0,
-      vibre: 0,
       all:"",
       input:"",
       id:[],
@@ -42,7 +43,9 @@ class App extends React.Component{
       lien4:[],
       arrayMonument:[],
       arrayElement:[],
-      result:[]
+      result:[],
+      prox: 1,
+      bool: false,
     }
   }
 
@@ -97,26 +100,37 @@ class App extends React.Component{
 //---------------- FONCTION GEOLOCALISATION
 
   findCoordinates = () => {
-		navigator.geolocation.getCurrentPosition (
+		/*navigator.geolocation.getCurrentPosition (
 			position => {
         //console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
 				this.setState({ lat: position.coords.latitude,
                         lng: position.coords.longitude
                       })
 			}
-		);
-    const refreshMap = navigator.geolocation.watchPosition(
+		);*/
+    navigator.geolocation.watchPosition(
 			position => {
         console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
 				this.setState({ lat: position.coords.latitude,
                         lng: position.coords.longitude
-                      })
+                      });
 			}
 		);
     /*setTimeout(() => {
       navigator.geolocation.clearWatch(refreshMap);
     }, 15000);*/
 	}
+
+  testProx(){
+    return (this.state.prox == 1);
+  }
+
+  createNotification = () => {
+        window.navigator.vibrate(3000);
+        console.log("vibre create notif", this.state.prox);
+        NotificationManager.info(this.userInProximity().lieu.nom);
+        this.setState({prox: 0});
+  }
 
   //---------------- FONCTION AFFICHER Description
 
@@ -140,14 +154,6 @@ class App extends React.Component{
      DisplayDesc(x) {
        return( <description id = {this.state.id[x]} nom = {this.state.nom[x]} img1 = {this.state.lien1[x]} img2 = {this.state.lien2[x]} img3 = {this.state.lien3[x]} img4 = {this.state.lien4[x]} desc = {this.state.description[x]} adresse = {this.state.adresse[x]}/>);
      }
-
-     vibre = () =>{
-    if (this.state.vibre == 0){
-      window.navigator.vibrate(3000);
-      this.setState({ vibre: 1});
-      console.log("vibre");
-    }
-}
 
 //---------------- FONCTION BARRE DE RECHERCHE
 
@@ -184,7 +190,38 @@ class App extends React.Component{
     });
  }
 
+
+/*
    userInProximity(){
+
+  //var a=this.state.lat
+  //var b=this.state.lng
+
+  var a=this.state.listLat[2]
+  var b=this.state.lon[2]
+  var tab=[]
+  var lieu=null
+  var prox=false
+
+  for(let i=0;i<this.state.id.length;i++)
+    tab[i] = {nom: this.state.nom[i], desc: this.state.description[i], lat: this.state.listLat[i], lng:this.state.lon[i]}
+
+  var tab2 = tab.map(x => a>x.lat-0.001 && a<x.lat+0.001 && b<x.lng+0.001 && b>x.lng-0.001)     //20metre(1" à priori)
+
+  if(tab2.includes(true) && this.state.bool == false){
+    lieu = tab[tab2.indexOf(true)]
+    prox = true
+    this.setState({bool:true})
+    return ({lieu:lieu, prox :prox})
+  }
+  else if (tab2.includes(false)){
+    this.state.bool= false
+  }
+  return ({lieu:lieu, prox :false})
+
+}*/
+
+userInProximity(){
   var a=this.state.lat
   var b=this.state.lng
   var tab=[]
@@ -201,15 +238,17 @@ class App extends React.Component{
     prox = true
   }
   return ({lieu:lieu, prox :prox})
-
 }
 
-  render() {
+  utiliser() {
+    return this.state.prox === 1;
+  }
 
+  render() {
     var monum = []
+    var x = 0
     for(let i=0;i<this.state.id.length -1 ;i++){
       monum[i] = {id: this.state.id[i], latitude: this.state.listLat[i], longitude: this.state.lon[i]}
-      console.log(monum[i]);
     }
 
     this.findCoordinates();
@@ -218,7 +257,6 @@ class App extends React.Component{
     return (
       <body>
         <header>
-
              {this.state.input==="te"?
                     <h1>test</h1>
               :this.state.input==="test"?
@@ -249,7 +287,7 @@ class App extends React.Component{
              </div>
              :null
              }
-
+             <NotificationContainer/>
     </header>
 
       <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
@@ -263,22 +301,25 @@ class App extends React.Component{
            monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} /* onClick={this.DisplayDesc(x.id)} */ ></Marker>)
           }
         }
-      </Map>
 
+      </Map>
     <footer>
-      {this.userInProximity().prox?(
-        this.vibre(),
-        //window.navigator.vibrate(3000),      VIBRATION
-        <div className="App-Proximity">
-          <p> Je suis à proximité de {this.userInProximity().lieu.nom}</p>
-          <p> {this.userInProximity().lieu.desc}</p>
-        </div>
-        ):
-        //this.setState({ vibre: 0}),
+    {console.log(this.state.prox)}
+      {this.userInProximity().prox?
+        //() => this.setState({prox: 1}),
+        //console.log(this.state.prox),
+        //this.createNotification(p),
+        (this.utiliser()?
+          this.createNotification()
+        :
+          null)
+        :
+        () => this.setState({prox: 1}),
         <div className="App-NoProximity">
           <p> Je ne suis pas à proximité d'un monument </p>
         </div>
       }
+      {console.log(this.state.prox)}
     </footer>
     </body>
     );
