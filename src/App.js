@@ -223,7 +223,7 @@ center = () => {
 
     return (
       <body>
-        <header>
+        <header class="bg-info">
              <div className="container col-md-9">
               <div className="row">
               <img class="left" src={logo} width="7%"/>
@@ -249,7 +249,7 @@ center = () => {
              :null
              }
     </header>
-      <Map ref={(ref) => { this.map = ref}} center={this.displaymove()? posi_actu: this.state.pos_map} zoom={this.state.zoom} style={{height: '850px'}} maxZoom='19.5' minZoom='4'
+      <Map class="map1" ref={(ref) => { this.map = ref}} center={this.displaymove()? posi_actu: this.state.pos_map} zoom={this.state.zoom} style={{height: '850px'}} maxZoom='19.5' minZoom='4'
       //onMove={() => this.setState({pos_init: 0, pos_map: this.map.leafletElement.getCenter()})}
       onZoom={() => this.setState({zoom: this.map.leafletElement.getZoom()})}>
         <TileLayer
@@ -266,7 +266,7 @@ center = () => {
       <input type="image" align="center" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.center}/>
       {this.displaydesc()?
         <div class="desc">
-            <input type="image" class="test1" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
+            <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
             <Description id = {this.state.id[this.state.descnum]}
                         nom = {this.state.nom[this.state.descnum]}
                         img1 = {this.state.lien1[this.state.descnum]}
