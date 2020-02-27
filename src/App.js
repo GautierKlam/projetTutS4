@@ -6,7 +6,9 @@ import L from 'leaflet';
 import axios from 'axios';
 import img from "./assets/loupe.png";
 import img2 from "./assets/croix.png";
+import logo from "./assets/Logo.png";
 import {  iconPerson, iconMonument  } from './Icon';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -116,6 +118,37 @@ class App extends React.Component{
     }, 15000);*/
 	}
 
+  //---------------- FONCTION AFFICHER Description
+
+  description(props) {
+    return(
+      <div class="App-description">
+        <p>{props.nom}</p>
+
+        <img src={props.img1}/>
+        <img src={props.img2}/>
+        <img src={props.img3}/>
+        <img src={props.img4}/>
+
+        <p>{props.text}</p>
+
+        <p>{props.adresse}</p>
+      </div>
+    )
+   }
+
+     DisplayDesc(x) {
+       return( <description id = {this.state.id[x]} nom = {this.state.nom[x]} img1 = {this.state.lien1[x]} img2 = {this.state.lien2[x]} img3 = {this.state.lien3[x]} img4 = {this.state.lien4[x]} desc = {this.state.description[x]} adresse = {this.state.adresse[x]}/>);
+     }
+
+     vibre = () =>{
+    if (this.state.vibre == 0){
+      window.navigator.vibrate(3000);
+      this.setState({ vibre: 1});
+      console.log("vibre");
+    }
+}
+
 //---------------- FONCTION BARRE DE RECHERCHE
 
     alerte = () => {
@@ -151,83 +184,102 @@ class App extends React.Component{
     });
  }
 
-   vibre = () => {
-     window.navigator.vibrate(3000);
-   }
+   userInProximity(){
+  var a=this.state.lat
+  var b=this.state.lng
+  var tab=[]
+  var lieu=null
+  var prox=false
 
+  for(let i=0;i<this.state.id.length;i++)
+    tab[i] = {nom: this.state.nom[i], desc: this.state.description[i], lat: this.state.listLat[i], lng:this.state.lon[i]}
 
+  var tab2 = tab.map(x => a>x.lat-0.001 && a<x.lat+0.001 && b<x.lng+0.001 && b>x.lng-0.001)     //20metre(1" à priori)
 
-//---------------- FONCTION RENDER
+  if(tab2.includes(true)){
+    lieu = tab[tab2.indexOf(true)]
+    prox = true
+  }
+  return ({lieu:lieu, prox :prox})
+
+}
+
   render() {
 
-    //--------------VARIABLES DE TEST ----------------
-    const monuments = [
-      { id: 1, nom: "monum1", lat: 49, longit: 6, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Fgoodguideinrio.com%2Fwp-content%2Fuploads%2F2018%2F03%2Fgood-guide-in-rio-city-tour-rio-3-450x450.jpg&imgrefurl=https%3A%2F%2Fgoodguideinrio.com%2Fcategorie-produit%2Fcartes-postales%2F&tbnid=78xiSy_C3Sh-bM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygAegUIARDKAQ..i&docid=EXgEpF14-S2wiM&w=450&h=450&itg=1&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygAegUIARDKAQ" },
-      { id: 2, nom: "monum2", lat: 48, longit: 7, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.la-coursive.com%2Fwp-content%2Fuploads%2F2020%2F01%2Fparis-2-450x450.png&imgrefurl=https%3A%2F%2Fwww.la-coursive.com%2Fcinema%2Flequipe-de-secours-en-route-pour-laventure-janis-cimermanis%2F&tbnid=2K7nKjj5PGA6HM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygFegUIARDUAQ..i&docid=zolR59PxtzH6rM&w=450&h=450&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygFegUIARDUAQ" },
-      { id: 3, nom: "monum3", lat: 49, longit: 6, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Fstatic.cavissima.com%2Fpub%2Fmedia%2Fproducer%2Fimage%2Fresized%2F450x450%2Fclos_du_marquis_clos_l_oville_lascases.png&imgrefurl=https%3A%2F%2Fwww.cavissima.com%2Fachat-vin%2Fpar-regions%2Fbordeaux%2Fclos-du-marquis%2F&tbnid=wyki7Lh4eH8gwM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygIegUIARDaAQ..i&docid=kgjIe7e04jUO8M&w=450&h=450&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygIegUIARDaAQ" },
-      { id: 4, nom: "monum4", lat: 48, longit: 7, desc: "desc1", img:"https://www.google.com/imgres?imgurl=https%3A%2F%2Ftoulouseboutiques.com%2Fwp-content%2Fuploads%2F2019%2F03%2FBoutiques-Wilson-Toulouse-2-450x450.jpg&imgrefurl=https%3A%2F%2Ftoulouseboutiques.com%2Fcategory%2Ffrance%2Fpage%2F3%2F&tbnid=zV-tw9wxe7zGEM&vet=12ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygYegQIARAy..i&docid=ekZKjOwsDbPQVM&w=450&h=450&itg=1&q=monument%20images%20450X450&ved=2ahUKEwiul6vSuO_nAhVOgRoKHQ5jAKUQMygYegQIARAy" },
-    ]
-    //-------------- FIN DES VARIABLES DE TEST ----------------
+    var monum = []
+    for(let i=0;i<this.state.id.length -1 ;i++){
+      monum[i] = {id: this.state.id[i], latitude: this.state.listLat[i], longitude: this.state.lon[i]}
+      console.log(monum[i]);
+    }
+
     this.findCoordinates();
     var posi_actu = [this.state.lat, this.state.lng];
-    this.vibre();
     /*<p> il y a {this.state.all.length} element</p>*/
     return (
-  <body>
-    <header>
-             <div className="col-lg-4">
-                <input type="image" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
-                <input type="image" align="center" src={img} alt="loupe.png" onClick={this.test}/>
+      <body>
+        <header>
+
              {this.state.input==="te"?
                     <h1>test</h1>
-             :this.state.input==="test"?
+              :this.state.input==="test"?
                     <h1>tes</h1>
-                    :this.state.input.match(/^c.*$/)?
+              :this.state.input.match(/^c.*$/)?
                     <h1>cathedrale</h1>:
                         this.state.input>""?
-             <h1>{this.state.input}autre</h1>:null}
+                          <h1>{this.state.input}autre</h1>:null}
              <div className="container col-md-9">
-             <div className="row">
-
-                <img class="left" src={img2} width="100px"/>
-                <div className="container col-md-5">
-               <h1>Lieux touristiques à Metz</h1>
-               </div>
-
-                 <div className="col-md-offset-10">
-            <input type="image" class="test" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
-            </div>
-            </div>
+              <div className="row">
+              <img class="left" src={logo} width="7%"/>
+                  <div className="container col-md-5">
+                 <h1>Lieux touristiques à Metz</h1>
+                 </div>
+                   <div className="col-md-offset-10">
+                    <input type="image" class="test" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
+                </div>
+              </div>
             </div>
             {this.state.test> 0?
+              <div className="container col-md-5">
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
-                <input type="image" src={img2} alt="croix.png" onClick={this.alerte2}/>
+                <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
                 {this.state.result.length>=""?
                     <h1>{this.state.result}</h1>:<p>pas de resultat</p>}
-                <input type="image" class="test1" src={img2} alt="croix.png" onClick={this.alerte2}/>
              </p>
+             </div>
              :null
              }
-             </div>
+
     </header>
+
       <Map center={posi_actu} zoom={this.state.zoom} style={{height: '850px'}}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
         <Marker position={posi_actu} icon={ iconPerson }>
-          <Popup>
-            <span>Vous êtes ici</span>
-          </Popup>
         </Marker>
         {
-          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} ></Marker>)
-        }
-        {
-          monuments.map(x => <Marker position={[x.lat,x.longit]}  icon={iconMonument} id={x.id} /*onClick={this.displayInfo(x)}*/ ></Marker>)
+           monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} /* onClick={this.DisplayDesc(x.id)} */ ></Marker>)
+          }
         }
       </Map>
+
+    <footer>
+      {this.userInProximity().prox?(
+        this.vibre(),
+        //window.navigator.vibrate(3000),      VIBRATION
+        <div className="App-Proximity">
+          <p> Je suis à proximité de {this.userInProximity().lieu.nom}</p>
+          <p> {this.userInProximity().lieu.desc}</p>
+        </div>
+        ):
+        //this.setState({ vibre: 0}),
+        <div className="App-NoProximity">
+          <p> Je ne suis pas à proximité d'un monument </p>
+        </div>
+      }
+    </footer>
     </body>
     );
   }
