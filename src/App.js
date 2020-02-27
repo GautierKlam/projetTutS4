@@ -194,7 +194,7 @@ class App extends React.Component{
     /*<p> il y a {this.state.all.length} element</p>*/
     return (
       <body>
-        <header>
+        <header class="bg-info">
              {this.state.input==="te"?
                     <h1>test</h1>
               :this.state.input==="test"?
@@ -244,7 +244,7 @@ class App extends React.Component{
       </Map>
       {this.displaydesc()?
         <div class="desc">
-            <input type="image" class="test1" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
+            <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
             <Description id = {this.state.id[this.state.descnum]}
                         nom = {this.state.nom[this.state.descnum]}
                         img1 = {this.state.lien1[this.state.descnum]}
