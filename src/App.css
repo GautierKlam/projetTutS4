@@ -28,37 +28,46 @@
   }
       h1{
         font-size: 20px;
-        float: none;
+        float: right;
+        margin-top: 4%;
+        margin-left: 50px;
+        position: absolute;
       }
       .test1{
-        width:5%;
+        width:15px;
       }
       .test{
-        width:30%;
-        height:80%;
-        float: right;
+        width:50px;
+        height:50px;
+        margin-left: 300px;
       }
       .test3{
-        width:15%;
-        height:15%;
+        position:absolute;
+        width:50px;
+        height:50px;
+      }
+      input[type='search'] {
+          width: 75%;
+          margin-left: 50px;
       }
     }
     @media screen and (min-width: 480px) {
-.test3{
-  width:7%;
-  height:7%;
+      .test3{
+        width:7%;
+        height:7%;
+      }
+      .test{
+        width:60%;
+        height:100%;
+      }
+      .test1 {
+        width: 2%;
+      }
+      input[type='search'] {
+          width: 75%;
+      }
 }
-.test{
-  width:60%;
-  height:100%;
-}
-.test1 {
-    width: 2%;
-}
-}
-input[type='search'] {
-    width: 75%;
-}
+
 
 .right{
   float:right;

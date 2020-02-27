@@ -226,12 +226,12 @@ center = () => {
         <header class="bg-info">
              <div className="container col-md-9">
               <div className="row">
-              <img class="left" src={logo} width="7%"/>
+              <img class="test3" src={logo} />
                   <div className="container col-md-5">
                  <h1>Lieux touristiques à Metz</h1>
                  </div>
-                   <div className="col-md-offset-10">
-                    <input type="image" class="test" align="center" src={img} alt="loupe.png" onClick={this.alerte}/>
+                   <div className="">
+                    <input type="image" class="test" src={img} alt="loupe.png" onClick={this.alerte}/>
                 </div>
               </div>
             </div>
@@ -249,7 +249,7 @@ center = () => {
              :null
              }
     </header>
-      <Map class="map1" ref={(ref) => { this.map = ref}} center={this.displaymove()? posi_actu: this.state.pos_map} zoom={this.state.zoom} style={{height: '850px'}} maxZoom='19.5' minZoom='4'
+      <Map class="map1 maptest" ref={(ref) => { this.map = ref}} center={this.displaymove()? posi_actu: this.state.pos_map} zoom={this.state.zoom} style={{height: '850px'}} maxZoom='19.5' minZoom='4'
       //onMove={() => this.setState({pos_init: 0, pos_map: this.map.leafletElement.getCenter()})}
       onZoom={() => this.setState({zoom: this.map.leafletElement.getZoom()})}>
         <TileLayer
