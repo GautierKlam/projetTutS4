@@ -242,10 +242,9 @@ userInProximity(){
   render() {
     var monum = []
     var x = 0
-    for(let i=0;i<this.state.id.length -1 ;i++){
+    for(let i=0 ;i<this.state.id.length -1 ;i++){
       monum[i] = {id: this.state.id[i], latitude: this.state.listLat[i], longitude: this.state.lon[i]}
     }
-
     this.findCoordinates();
 
     if(this.state.compteur_init < 2) {
@@ -294,7 +293,8 @@ userInProximity(){
           Vous êtes ici !
         </Popup>
         </Marker>
-        {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1})}></Marker>)}
+        <Marker position = {[49, 6]}> </Marker>
+        {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={ iconMonument } id={x.id} onClick={() => this.setState({descnum: x.id - 1})}></Marker>)}
       </Map>
       <input type="image" class="icon" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.centrer}/>
     <footer>

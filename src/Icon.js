@@ -8,7 +8,7 @@ const iconPerson = new L.Icon({
 
 const iconMonument = new L.Icon({
     iconUrl: require('./assets/monument.png'),
-    iconRetinaUrl: ('./assets/monument.png'),
+    iconRetinaUrl: require('./assets/monument.png'),
     iconSize: [60, 75]
 });
 
