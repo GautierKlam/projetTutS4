@@ -346,7 +346,7 @@ userInProximity(){
         </Marker>
         {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1,height:"300px"})}></Marker>)}//marker des monuments
       </Map>
-      <input type="image" class="icon" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.centrer}/>
+      <input type="image" class="icon2" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.centrer}/>
     <footer>
     {this.displaydesc()? //zone de construction des descriptons
       <div class="desc">
