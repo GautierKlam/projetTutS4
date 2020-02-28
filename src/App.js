@@ -64,6 +64,7 @@ class App extends React.Component{
     }
     this.centrer = this.centrer.bind(this);
     this.goto = this.goto.bind(this);
+    this.location = this.location.bind(this);
   }
 
   //---------------- RECUPERE LA BASE DE DONNEE AVEC AXIOS ET ECOUTE LES EVENEMENTS DE LEAFLET
@@ -115,6 +116,10 @@ class App extends React.Component{
               });
         });
         const leafletMap = this.leafletMap.leafletElement;
+        this.leafletMap.leafletElement.locate();
+        leafletMap.on('locationfound', (pos) => {
+              this.findCoordinates();
+              this.location(this.state.pos_actu);});
         leafletMap.on('zoomend', () => {
           const updatedZoomLevel = leafletMap.getZoom();
               this.handleZoomLevelChange(updatedZoomLevel);});
@@ -287,6 +292,11 @@ userInProximity(){
       }
     }
 
+    location = (pos) => {
+      const leafletMap = this.leafletMap.leafletElement;
+      this.leafletMark.leafletElement.setLatLng(pos);
+    }
+
     //---------------- FONCTION D'AFFICHAGE GENERALE
 
   render() {
@@ -305,8 +315,6 @@ userInProximity(){
       });
       this.firstCoordinates();
     }
-
-
 
     return (
       <body class="bg-info">
@@ -342,7 +350,7 @@ userInProximity(){
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <Marker position={this.state.pos_actu} icon={ iconPerson }> //marker représentant notre position
+        <Marker ref={ref => { this.leafletMark = ref}} position={this.state.pos_actu} icon={ iconPerson }> //marker représentant notre position
         <Popup>
           Vous êtes ici !
         </Popup>
