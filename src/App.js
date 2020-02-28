@@ -52,9 +52,11 @@ class App extends React.Component{
       pos_actu: [0.0, 0.0],
       pos_init: 1,
       compteur_btn: 2,
-      compteur_init: 0
+      compteur_init: 0,
+      etat_desc: 0
     }
     this.centrer = this.centrer.bind(this);
+    this.goto = this.goto.bind(this);
   }
 
       componentDidMount() {
@@ -125,19 +127,23 @@ firstCoordinates = () => {
   findCoordinates = () => {
    navigator.geolocation.watchPosition(
 			position => {
-        console.log(`longitude: ${ position.coords.longitude } | latitude: ${ position.coords.latitude }`);
 				this.setState({ lat: position.coords.latitude,
                         lng: position.coords.longitude,
                         pos_actu: [position.coords.latitude, position.coords.longitude]
                       })
-			})
+			});
 	}
 
-  createNotification = () => {
+  createNotification = (id) => {
         window.navigator.vibrate(3000);
-        console.log("vibre create notif");
         NotificationManager.info(this.userInProximity().lieu.nom);
-        this.setState({prox: 0});
+        this.setState({
+                        prox: 0,
+                        descnum: id,
+                        pos_init: 0,
+                        etat_desc: 0
+                      });
+       this.goto(id, true);
   }
 
   testProx(){
@@ -156,14 +162,18 @@ firstCoordinates = () => {
         this.setState ({
           test: 0,
           input: "",
-          descnum: id
+          descnum: id,
+          etat_desc: 0,
+          compteur_btn: 0
         });
+        this.goto(id, true);
     }
 
     alerte3 = () => {
         this.setState ({
           test: 0,
-          input: ""
+          input: "",
+          etat_desc: 0
         });
     }
 
@@ -172,7 +182,7 @@ firstCoordinates = () => {
     let array=[];
     let str=document.getElementById('search').value;
     str=str.toLowerCase();
-      for(let i=0;i<this.state.nom.length;i++){
+      for(let i=0;i<this.state.nom.length - 1;i++){
           let rech=""+this.state.nom[i];
           rech=rech.toLowerCase();
           if(rech.includes(str)){
@@ -196,17 +206,19 @@ userInProximity(){
   var tab=[]
   var lieu=null
   var prox=false
+  var id = 0
 
   for(let i=0;i<this.state.id.length;i++)
-    tab[i] = {nom: this.state.nom[i], desc: this.state.description[i], lat: this.state.listLat[i], lng:this.state.lon[i]}
+    tab[i] = {nom: this.state.nom[i], desc: this.state.description[i], lat: this.state.listLat[i], lng: this.state.lon[i]}
 
-  var tab2 = tab.map(x => a>x.lat-0.001 && a<x.lat+0.001 && b<x.lng+0.001 && b>x.lng-0.001)     //20metre(1" à priori)
+  var tab2 = tab.map(x => a>parseFloat(x.lat)-0.0006 && a<parseFloat(x.lat)+0.0006 && b<parseFloat(x.lng)+0.000625 && b>parseFloat(x.lng)-0.000625)
 
   if(tab2.includes(true)){
     lieu = tab[tab2.indexOf(true)]
+    id = tab2.indexOf(true)
     prox = true
   }
-  return ({lieu:lieu, prox :prox})
+  return ({lieu:lieu, prox: prox, id: id})
 }
 
 //---------------- FONCTION D'AFFICHAGE
@@ -237,6 +249,21 @@ userInProximity(){
       });
       leafletMap.setZoom(17);
       leafletMap.panTo(this.state.pos_actu);
+    }
+
+    goto = (id, etat) => {
+      if(((this.state.etat_desc === 0) && (this.state.pos_init === 0)) || (etat === true)) {
+        const leafletMap = this.leafletMap.leafletElement;
+        this.setState ({
+           pos_init: 0,
+           compteur_btn: 0,
+           etat_desc: 1,
+           zoom: 19,
+           pos_map: [this.state.listLat[id], this.state.lon[id]]
+        });
+        leafletMap.setZoom(19);
+        leafletMap.panTo([this.state.listLat[id], this.state.lon[id]]);
+      }
     }
 
   render() {
@@ -315,7 +342,7 @@ userInProximity(){
     }
       {this.userInProximity().prox?
         (this.utiliser()?
-          this.createNotification()
+          this.createNotification(this.userInProximity().id)
         :
           null)
         :
