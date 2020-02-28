@@ -31,6 +31,7 @@ class App extends React.Component{
       lng: 0,
       zoom: 17,
       test: 0,
+      height:"850px",
       all:"",
       input:"",
       id:[],
@@ -164,7 +165,8 @@ firstCoordinates = () => {
           input: "",
           descnum: id,
           etat_desc: 0,
-          compteur_btn: 0
+          compteur_btn: 0,
+          height: "300px"
         });
         this.goto(id, true);
     }
@@ -223,6 +225,7 @@ userInProximity(){
 
 //---------------- FONCTION D'AFFICHAGE
 
+
     handleZoomLevelChange(newZoomLevel) {
         this.setState({ zoom: newZoomLevel });
     }
@@ -269,10 +272,9 @@ userInProximity(){
   render() {
     var monum = []
     var x = 0
-    for(let i=0;i<this.state.id.length -1 ;i++){
+    for(let i=0 ;i<this.state.id.length -1 ;i++){
       monum[i] = {id: this.state.id[i], latitude: this.state.listLat[i], longitude: this.state.lon[i]}
     }
-
     this.findCoordinates();
 
     if(this.state.compteur_init < 2) {
@@ -283,7 +285,7 @@ userInProximity(){
     }
 
     return (
-      <body>
+      <body class="bg-info">
         <header class="bg-info">
              <div className="container col-md-9">
               <div className="row">
@@ -311,7 +313,7 @@ userInProximity(){
              }
              <NotificationContainer/>
     </header>
-      <Map class="map1" ref={ref => { this.leafletMap = ref}} center={this.state.pos_map} zoom={this.state.zoom} style={{height: '850px'}} maxZoom='19.5' minZoom='4'>
+      <Map class="map1" ref={ref => { this.leafletMap = ref}} center={this.state.pos_map} zoom={this.state.zoom} style={{height: this.state.height}} maxZoom='19.5' minZoom='4'>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -321,13 +323,13 @@ userInProximity(){
           Vous êtes ici !
         </Popup>
         </Marker>
-        {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1})}></Marker>)}
+        {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1,height:"300px"})}></Marker>)}
       </Map>
       <input type="image" class="icon" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.centrer}/>
     <footer>
     {this.displaydesc()?
       <div class="desc">
-          <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1})}/>
+          <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1, height:"850px"})}/>
           <Description id = {this.state.id[this.state.descnum]}
                       nom = {this.state.nom[this.state.descnum]}
                       img1 = {this.state.lien1[this.state.descnum]}
