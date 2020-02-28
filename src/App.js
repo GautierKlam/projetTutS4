@@ -256,7 +256,7 @@ userInProximity(){
     }
 
     return (
-      <body>
+      <body class="bg-info">
         <header class="bg-info">
              <div className="container col-md-9">
               <div className="row">
