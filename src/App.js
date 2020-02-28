@@ -36,7 +36,7 @@ class App extends React.Component{
       lng: 0,
       zoom: 17,
       test: 0,
-      height:"675px",
+      height:"650px",
       all:"",
       input:"",
       id:[],
@@ -357,11 +357,11 @@ userInProximity(){
         </Marker>
         {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1,height:"300px"})}></Marker>)}//marker des monuments
       </Map>
-      <input type="image" class="icon" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.centrer}/>
+      <input type="image" class="icon2" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.centrer}/>
     <footer>
     {this.displaydesc()? //zone de construction des descriptons
       <div class="desc">
-          <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1, height:"675px"})}/>
+          <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1, height:"650px"})}/>
           <Description id = {this.state.id[this.state.descnum]}
                       nom = {this.state.nom[this.state.descnum]}
                       img1 = {this.state.lien1[this.state.descnum]}
