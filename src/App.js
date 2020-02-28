@@ -214,6 +214,7 @@ userInProximity(){
 
 //---------------- FONCTION D'AFFICHAGE
 
+
     handleZoomLevelChange(newZoomLevel) {
         this.setState({ zoom: newZoomLevel });
     }
@@ -245,10 +246,9 @@ userInProximity(){
   render() {
     var monum = []
     var x = 0
-    for(let i=0;i<this.state.id.length -1 ;i++){
+    for(let i=0 ;i<this.state.id.length -1 ;i++){
       monum[i] = {id: this.state.id[i], latitude: this.state.listLat[i], longitude: this.state.lon[i]}
     }
-
     this.findCoordinates();
 
     if(this.state.compteur_init < 2) {
@@ -330,7 +330,6 @@ userInProximity(){
   }
 
   displaydesc() {
-
     return this.state.descnum != -1;
   }
 
