@@ -128,7 +128,10 @@ class App extends React.Component{
 firstCoordinates = () => {
   navigator.geolocation.getCurrentPosition (
     position => {
-      this.setState({pos_map: [position.coords.latitude, position.coords.longitude]})
+      this.setState({
+                      pos_map: [position.coords.latitude, position.coords.longitude],
+                      pos_actu: [position.coords.latitude, position.coords.longitude]
+                    })
     }
   );
 }
@@ -339,7 +342,7 @@ userInProximity(){
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <Marker position={[this.state.lat, this.state.lng]} icon={ iconPerson }> //marker représentant notre position
+        <Marker position={this.state.pos_actu} icon={ iconPerson }> //marker représentant notre position
         <Popup>
           Vous êtes ici !
         </Popup>
