@@ -36,7 +36,7 @@ class App extends React.Component{
       lng: 0,
       zoom: 17,
       test: 0,
-      height:"850px",
+      height:"675px",
       all:"",
       input:"",
       id:[],
@@ -353,7 +353,7 @@ userInProximity(){
     <footer>
     {this.displaydesc()? //zone de construction des descriptons
       <div class="desc">
-          <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1, height:"850px"})}/>
+          <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1, height:"675px"})}/>
           <Description id = {this.state.id[this.state.descnum]}
                       nom = {this.state.nom[this.state.descnum]}
                       img1 = {this.state.lien1[this.state.descnum]}
