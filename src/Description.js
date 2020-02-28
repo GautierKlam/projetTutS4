@@ -1,12 +1,12 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
 
 class Description extends React.Component{
 
   constructor(props) {
       super(props);
-
       this.state = {
-          id: "",
           nom: "",
           img1: "",
           img2: "",
@@ -20,15 +20,21 @@ class Description extends React.Component{
   render() {
     return(
       <div class="App-description">
-        <p>{this.state.nom}</p>
-        <img src={this.state.img1}/>
-        <img src={this.state.img2}/>
-        <img src={this.state.img3}/>
-        <img src={this.state.img4}/>
+      <div className="row col-md-12">
+      <div className="text-center">
+        <p class="mark">{this.props.nom}</p>
 
-        <p>{this.state.text}</p>
+        <img src={this.props.img1} class="img"/>
 
-        <p>{this.state.adresse}</p>
+        <img src={this.props.img2} class="img"/>
+        <img src={this.props.img3} class="img"/>
+        <img src={this.props.img4} class="img"/>
+
+        <p>{this.props.text}</p>
+
+        <p>{this.props.adresse}</p>
+        </div>
+      </div>
       </div>
     )
   }
