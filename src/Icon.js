@@ -1,4 +1,7 @@
+//---------------- IMPORTATION
 import L from 'leaflet';
+
+//---------------- ICONES
 
 const iconPerson = new L.Icon({
     iconUrl: require('./assets/marker.png'),
@@ -11,5 +14,7 @@ const iconMonument = new L.Icon({
     iconRetinaUrl: require('./assets/monument.png'),
     iconSize: [60, 75]
 });
+
+//---------------- EXPORTATIONS
 
 export { iconPerson, iconMonument };

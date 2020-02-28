@@ -1,3 +1,4 @@
+//---------------- IMPORTATIONS
 import React from 'react';
 import './App.css';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
@@ -14,6 +15,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'react-notifications/lib/notifications.css';
 import Description from './Description';
 
+//---------------- CHANGEMENT D'ICONE
+
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -21,6 +24,8 @@ L.Icon.Default.mergeOptions({
     iconUrl: require('leaflet/dist/images/marker-icon.png'),
     shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 });
+
+//---------------- DEBUT DE LA CLASSE APP.JS
 
 class App extends React.Component{
 
@@ -54,11 +59,14 @@ class App extends React.Component{
       pos_init: 1,
       compteur_btn: 2,
       compteur_init: 0,
-      etat_desc: 0
+      etat_desc: 0,
+      etat_rech: 0
     }
     this.centrer = this.centrer.bind(this);
     this.goto = this.goto.bind(this);
   }
+
+  //---------------- RECUPERE LA BASE DE DONNEE AVEC AXIOS ET ECOUTE LES EVENEMENTS DE LEAFLET
 
       componentDidMount() {
         axios.get('https://devweb.iutmetz.univ-lorraine.fr/~giuliani6u/ProjetS4/API/post/all.php', {headers: {"Access-Control-Allow-Origin": "*"}})
@@ -135,6 +143,8 @@ firstCoordinates = () => {
 			});
 	}
 
+  //---------------- FONCTION DE CREATION POUR LA NOTIFICATION
+
   createNotification = (id) => {
         window.navigator.vibrate(3000);
         NotificationManager.info(this.userInProximity().lieu.nom);
@@ -147,15 +157,22 @@ firstCoordinates = () => {
        this.goto(id, true);
   }
 
+//---------------- TEST BOOLEEN POUR LA PROXIMITE
+
   testProx(){
     return (this.state.prox == 1);
   }
 
-//---------------- FONCTION BARRE DE RECHERCHE
+  utiliser() {
+    return this.state.prox === 1;
+  }
+
+//---------------- FONCTION POUR LA BARRE DE RECHERCHE
 
     alerte = () => {
         this.setState ({
-          test: 1
+          test: 1,
+          etat_rech: 1
         });
     }
 
@@ -166,7 +183,8 @@ firstCoordinates = () => {
           descnum: id,
           etat_desc: 0,
           compteur_btn: 0,
-          height: "300px"
+          height: "300px",
+          etat_rech: 0
         });
         this.goto(id, true);
     }
@@ -175,7 +193,8 @@ firstCoordinates = () => {
         this.setState ({
           test: 0,
           input: "",
-          etat_desc: 0
+          etat_desc: 0,
+          etat_rech: 0
         });
     }
 
@@ -223,16 +242,12 @@ userInProximity(){
   return ({lieu:lieu, prox: prox, id: id})
 }
 
-//---------------- FONCTION D'AFFICHAGE
+//---------------- FONCTIONS D'AFFICHAGE
 
 
     handleZoomLevelChange(newZoomLevel) {
         this.setState({ zoom: newZoomLevel });
     }
-
-  utiliser() {
-    return this.state.prox === 1;
-  }
 
     handleCenterPosChange = (newCenterPos) => {
           if(this.state.compteur_btn < 4) {
@@ -269,20 +284,26 @@ userInProximity(){
       }
     }
 
+    //---------------- FONCTION D'AFFICHAGE GENERALE
+
   render() {
+    //---------------- CREATION D'UNE TABLE POUR LES MARKERS
     var monum = []
     var x = 0
     for(let i=0 ;i<this.state.id.length -1 ;i++){
       monum[i] = {id: this.state.id[i], latitude: this.state.listLat[i], longitude: this.state.lon[i]}
     }
-    this.findCoordinates();
 
-    if(this.state.compteur_init < 2) {
+    this.findCoordinates(); // geolocalisation
+
+    if(this.state.compteur_init < 2) { //geolocalisation au début doublée par sécurité
       this.setState({
         compteur_init: 2
       });
       this.firstCoordinates();
     }
+
+
 
     return (
       <body class="bg-info">
@@ -294,11 +315,11 @@ userInProximity(){
                  <h1>Lieux touristiques à Metz</h1>
                  </div>
                    <div className="">
-                    <input type="image" class="test" src={img} alt="loupe.png" onClick={this.alerte}/>
+                    <input type="image" class="test" src={img} alt="loupe.png" onClick={this.rech_on()? this.alerte3 :this.alerte}/>
                 </div>
               </div>
             </div>
-            {this.state.test> 0?
+            {this.state.test> 0? //Zone de la barre de recherche
               <div className="container col-md-5">
              <p>
                 <input type="search" placeholder="Saisissez votre recherche" onChange={this.research}  id="search" name="q" />
@@ -313,21 +334,21 @@ userInProximity(){
              }
              <NotificationContainer/>
     </header>
-      <Map class="map1" ref={ref => { this.leafletMap = ref}} center={this.state.pos_map} zoom={this.state.zoom} style={{height: this.state.height}} maxZoom='19.5' minZoom='4'>
+      <Map class="map1" ref={ref => { this.leafletMap = ref}} center={this.state.pos_map} zoom={this.state.zoom} style={{height: this.state.height}} maxZoom='19.5' minZoom='4'>  //map
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
         />
-        <Marker position={[this.state.lat, this.state.lng]} icon={ iconPerson }>
+        <Marker position={[this.state.lat, this.state.lng]} icon={ iconPerson }> //marker représentant notre position
         <Popup>
           Vous êtes ici !
         </Popup>
         </Marker>
-        {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1,height:"300px"})}></Marker>)}
+        {monum.map(x => <Marker position={[x.latitude, x.longitude]}  icon={iconMonument} id={x.id} onClick={() => this.setState({descnum: x.id - 1,height:"300px"})}></Marker>)}//marker des monuments
       </Map>
       <input type="image" class="icon" src={iconPersonMini} value="centrer" alt="miniperso.png" onClick={this.centrer}/>
     <footer>
-    {this.displaydesc()?
+    {this.displaydesc()? //zone de construction des descriptons
       <div class="desc">
           <input type="image" class="test1 right" src={img2} alt="croix.png" onClick={() => this.setState({descnum: -1, height:"675px"})}/>
           <Description id = {this.state.id[this.state.descnum]}
@@ -342,7 +363,7 @@ userInProximity(){
         :
         null
     }
-      {this.userInProximity().prox?
+      {this.userInProximity().prox? //test de proximité
         (this.utiliser()?
           this.createNotification(this.userInProximity().id)
         :
@@ -355,10 +376,16 @@ userInProximity(){
     );
   }
 
-  displaydesc() {
+  displaydesc() { //fonction de test pour la description
     return this.state.descnum != -1;
   }
 
+  rech_on() { //fonction de test pour la recherche
+    return this.state.etat_rech === 1;
+  }
+
 }
+
+//---------------- EXPORTATION
 
 export default App;

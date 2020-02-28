@@ -1,6 +1,9 @@
+//---------------- IMPORTATIONS
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+
+//---------------- DEBUT CLASSE DESCRIPTION
 
 class Description extends React.Component{
 
@@ -16,6 +19,8 @@ class Description extends React.Component{
           adresse: ""
       }
   }
+
+  //---------------- AFFICHAGE DU COMPOSANT DE DESCRIPTION
 
   render() {
     return(
@@ -39,5 +44,7 @@ class Description extends React.Component{
     )
   }
 }
+
+//---------------- EXPORATION
 
 export default Description;
